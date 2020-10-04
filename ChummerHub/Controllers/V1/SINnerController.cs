@@ -839,18 +839,7 @@ namespace ChummerHub.Controllers.V1
                     }
 
                     if (sinner.MyGroup?.Id != null && sinner.MyGroup?.Id != Guid.Empty)
-                    {
-                        if (user.FavoriteGroups.All(a => a.FavoriteGuid != sinner.MyGroup.Id))
-                        {
-                            user.FavoriteGroups.Add(new ApplicationUserFavoriteGroup
-                            {
-                                FavoriteGuid = sinner.MyGroup.Id.Value
-                            });
-                        }
-                    }
-
-                    if (user != null)
-                        user.FavoriteGroups = user.FavoriteGroups.GroupBy(a => a.FavoriteGuid).Select(b => b.First()).ToList();
+                        user.FavoriteGroups.Add(sinner.MyGroup.Id.Value);
 
                     try
                     {
@@ -863,16 +852,8 @@ namespace ChummerHub.Controllers.V1
                                 _logger, oldgroup.PasswordHash, roles, tc);
                         }
                         await _context.SaveChangesAsync();
-                        if (oldsinner == null && user.FavoriteGroups != null)
-                        {
-                            if (user.FavoriteGroups.All(a => a.FavoriteGuid != sinner.Id))
-                            {
-                                user.FavoriteGroups.Add(new ApplicationUserFavoriteGroup
-                                {
-                                    FavoriteGuid = sinner.Id.Value
-                                });
-                            }
-                        }
+                        if (oldsinner == null)
+                            user.FavoriteGroups.Add(sinner.Id.Value);
 
                         await _context.SaveChangesAsync();
                     }
@@ -1161,7 +1142,7 @@ namespace ChummerHub.Controllers.V1
                 throw new ArgumentNullException(nameof(id), "Id is empty!");
             }
 
-            SINner dbsinner = null;
+            SINner dbsinner;
             if (allincludes)
             {
                 dbsinner = await _context.SINners

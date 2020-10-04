@@ -126,12 +126,8 @@ namespace ChummerHub.Controllers.V1
                     if (parentGroupId == Guid.Empty)
                     {
                         //only make this group a favorite group of the user and return
-                        if (user.FavoriteGroups.All(a => a.FavoriteGuid != GroupId))
+                        if (user.FavoriteGroups.Add(GroupId))
                         {
-                            user.FavoriteGroups.Add(new ApplicationUserFavoriteGroup
-                            {
-                                FavoriteGuid = GroupId
-                            });
                             await _context.SaveChangesAsync();
                         }
                     }
@@ -149,18 +145,9 @@ namespace ChummerHub.Controllers.V1
                         returnGroup = parentGroup;
                     }
                 }
-                else
+                else if (user.FavoriteGroups.Remove(GroupId))
                 {
-                    if (user.FavoriteGroups.Any(a => a.FavoriteGuid == GroupId))
-                    {
-                        var removefav = user.FavoriteGroups.FirstOrDefault(a => a.FavoriteGuid == GroupId);
-                        if (removefav != null)
-                        {
-                            user.FavoriteGroups.Remove(removefav);
-                            onlyFavremoval = true;
-                        }
-
-                    }
+                    onlyFavremoval = true;
                 }
 
                 myGroup.Groupname = groupname;
@@ -416,13 +403,7 @@ namespace ChummerHub.Controllers.V1
                     }
 
                     if (mygroup.Id != null)
-                    {
-                        if (user.FavoriteGroups.All(predicate: a => a.FavoriteGuid != mygroup.Id.Value))
-                            user.FavoriteGroups.Add(item: new ApplicationUserFavoriteGroup()
-                            {
-                                FavoriteGuid = mygroup.Id.Value
-                            });
-                    }
+                        user.FavoriteGroups.Add(mygroup.Id.Value);
 
                     if (SinnerId != null)
                     {
@@ -624,17 +605,9 @@ namespace ChummerHub.Controllers.V1
                     throw new ArgumentNullException(nameof(SinnerId), "SinnerId may not be empty.");
                 }
                 if (GroupId == Guid.Empty)
-                {
-                    if (user.FavoriteGroups.All(a => a.FavoriteGuid != SinnerId.Value))
-                        user.FavoriteGroups.Add(new ApplicationUserFavoriteGroup()
-                        {
-                            FavoriteGuid = SinnerId.Value
-                        });
-                }
+                    user.FavoriteGroups.Add(SinnerId.Value);
                 else if (GroupId == null)
-                {
-                    user.FavoriteGroups.RemoveAll(a => a.FavoriteGuid == SinnerId);
-                }
+                    user.FavoriteGroups.Remove(SinnerId.Value);
                 else
                 {
                     var targetgroup = await context.SINnerGroups.Include(a => a.MySettings)
@@ -660,18 +633,9 @@ namespace ChummerHub.Controllers.V1
                         }
                     }
 
-                    if (MyTargetGroup.Id != null && user != null)
-                    {
-                        if (user.FavoriteGroups.All(a => a.FavoriteGuid != MyTargetGroup.Id.Value))
-                            user.FavoriteGroups.Add(new ApplicationUserFavoriteGroup()
-                            {
-                                FavoriteGuid = MyTargetGroup.Id.Value
-                            });
-                    }
+                    if (MyTargetGroup.Id != null)
+                        user?.FavoriteGroups.Add(MyTargetGroup.Id.Value);
                 }
-                if (user != null)
-                    user.FavoriteGroups = user.FavoriteGroups.GroupBy(a => a.FavoriteGuid).Select(b => b.First()).ToList();
-
 
                 SINner sin = await context.SINners.Include(a => a.MyGroup)
                     .Include(a => a.MyGroup.MyParentGroup)
@@ -1277,8 +1241,7 @@ namespace ChummerHub.Controllers.V1
                             Id = Guid.Empty,
                             Groupname = "Favorites"
                         };
-                        var favlist = user.FavoriteGroups.Select(a => a.FavoriteGuid).ToHashSet();
-                        var favgrouplist = await _context.SINnerGroups.Where(a => a.Id != null && favlist.Contains(a.Id.Value))
+                        var favgrouplist = await _context.SINnerGroups.Where(a => a.Id != null && user.FavoriteGroups.Contains(a.Id.Value))
                             .ToListAsync();
                         foreach (var favgroup in favgrouplist)
                         {

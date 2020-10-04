@@ -32,8 +32,8 @@ namespace ChummerHub.Controllers
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'AccountController'
     {
 
-        private readonly UserManager<ApplicationUser> _userManager = null;
-        private readonly SignInManager<ApplicationUser> _signInManager = null;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ILogger _logger;
@@ -526,10 +526,9 @@ namespace ChummerHub.Controllers
             Stopwatch sw = new Stopwatch();
             sw.Start();
             //var tc = new Microsoft.ApplicationInsights.TelemetryClient();
-            ResultAccountGetSinnersByAuthorization res = null;
 
             SINSearchGroupResult ret = new SINSearchGroupResult();
-            res = new ResultAccountGetSinnersByAuthorization(ret);
+            ResultAccountGetSinnersByAuthorization res = new ResultAccountGetSinnersByAuthorization(ret);
             SINnerGroup sg = new SINnerGroup();
             var user = await _signInManager.UserManager.GetUserAsync(User);
 
@@ -542,13 +541,12 @@ namespace ChummerHub.Controllers
                 };
                 return BadRequest(res);
             }
-            user.FavoriteGroups = user.FavoriteGroups.GroupBy(a => a.FavoriteGuid).Select(b => b.First()).ToList();
 
             SINnerSearchGroup ssg = new SINnerSearchGroup(sg, user)
             {
                 MyMembers = new List<SINnerSearchGroupMember>()
             };
-            using (var t = new TransactionScope(TransactionScopeOption.Required,
+            using (new TransactionScope(TransactionScopeOption.Required,
                 new TransactionOptions
                 {
                     IsolationLevel = IsolationLevel.ReadUncommitted
@@ -560,24 +558,23 @@ namespace ChummerHub.Controllers
                     ret.Roles = roles.ToList();
                     ssg.Groupname = user.UserName;
                     ssg.Id = Guid.Empty;
-                    var worklist = user.FavoriteGroups.Select(a => a.FavoriteGuid).ToList();
                     var groupworklist = _context.SINnerGroups
                         .Include(a => a.MyGroups)
                         .ThenInclude(b => b.MyGroups)
                         .ThenInclude(c => c.MyGroups)
                         .ThenInclude(d => d.MyGroups)
-                        .Where(a => a.Id != null && worklist.Contains(a.Id.Value)).ToList();
+                        .Where(a => a.Id != null && user.FavoriteGroups.Contains(a.Id.Value)).ToList();
                     ssg.MySINSearchGroups = await RecursiveBuildGroupMembers(groupworklist, user);
                     var memberworklist = _context.SINners
                         .Include(a => a.MyGroup)
                         .Include(a => a.SINnerMetaData.Visibility)
-                        .Where(a => a.Id != null && worklist.Contains(a.Id.Value));
+                        .Where(a => a.Id != null && user.FavoriteGroups.Contains(a.Id.Value));
                     foreach (var member in memberworklist)
                     {
                         if (member.SINnerMetaData?.Visibility?.IsGroupVisible == false)
                         {
                             if (member.SINnerMetaData?.Visibility.UserRights.Any(a =>
-                                    !string.IsNullOrEmpty(a.EMail)) == true)
+                                !string.IsNullOrEmpty(a.EMail)) == true)
                             {
                                 if (member.SINnerMetaData?.Visibility.UserRights.Any(a =>
                                     user.NormalizedEmail.Equals(a.EMail, StringComparison.OrdinalIgnoreCase)) == false)
@@ -706,7 +703,7 @@ namespace ChummerHub.Controllers
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member 'AccountController.GetSinnerAsAdmin()'
         {
             SINSearchGroupResult ret = new SINSearchGroupResult();
-            ResultAccountGetSinnersByAuthorization res = new ResultAccountGetSinnersByAuthorization(ret);
+            ResultAccountGetSinnersByAuthorization res;
             SINnerGroup sg = new SINnerGroup();
             var user = await _signInManager.UserManager.GetUserAsync(User);
 
@@ -719,7 +716,6 @@ namespace ChummerHub.Controllers
                 };
                 return BadRequest(res);
             }
-            user.FavoriteGroups = user.FavoriteGroups.GroupBy(a => a.FavoriteGuid).Select(b => b.First()).ToList();
 
             SINnerSearchGroup ssg = new SINnerSearchGroup(sg, user)
             {

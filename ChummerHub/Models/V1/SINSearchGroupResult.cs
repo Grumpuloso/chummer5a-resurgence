@@ -50,13 +50,7 @@ namespace ChummerHub.Models.V1
             PasswordHash = groupbyname?.PasswordHash;
             MySettings = groupbyname?.MySettings;
             HasPassword = PasswordHash?.Length > 0;
-            IsFavorite = false;
-            if (user != null)
-            {
-                if (user.FavoriteGroups.Count > 0)
-                    user.FavoriteGroups = user.FavoriteGroups.GroupBy(a => a.FavoriteGuid).Select(b => b.First()).ToList();
-                IsFavorite = user.FavoriteGroups.Any(a => a.FavoriteGuid == Id);
-            }
+            IsFavorite = user != null && Id != null && user.FavoriteGroups.Contains(Id.Value);
         }
 
     }
@@ -73,11 +67,7 @@ namespace ChummerHub.Models.V1
             //    throw new ArgumentNullException(nameof(user));
             Username = user?.UserName;
             MySINner = member ?? throw new ArgumentNullException(nameof(member));
-            if (user  != null && user.FavoriteGroups?.Count > 0)
-            {
-                user.FavoriteGroups = user.FavoriteGroups.GroupBy(a => a.FavoriteGuid).Select(b => b.First()).ToList();
-                IsFavorite = user.FavoriteGroups.Any(a => a.FavoriteGuid == MySINner.Id);
-            }
+            IsFavorite = user != null && MySINner.Id != null && user.FavoriteGroups.Contains(MySINner.Id.Value);
         }
         public SINnerSearchGroupMember()
         {

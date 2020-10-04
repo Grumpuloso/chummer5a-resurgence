@@ -139,8 +139,6 @@ namespace ChummerHub.Data
             //    .HasIndex(b => b.SINnerId);
             builder.Entity<Models.V1.Tag>()
                 .HasIndex(b => b.TagValueFloat);
-            builder.Entity<ApplicationUserFavoriteGroup>()
-                .HasIndex(b => b.FavoriteGuid);
             try
             {
                 Database.ExecuteSqlCommand(

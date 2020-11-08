@@ -146,19 +146,6 @@ namespace Chummer
             _characterOptions.DontDoubleQualityPurchases = chkDontDoubleQualityPurchases.Checked;
             _characterOptions.DontDoubleQualityRefunds = chkDontDoubleQualityRefunds.Checked;
             _characterOptions.EnforceCapacity = chkEnforceCapacity.Checked;
-            try
-            {
-                _characterOptions.FreeContactsMultiplier = decimal.ToInt32(nudContactMultiplier.Value);
-                _characterOptions.EssenceDecimals = decimal.ToInt32(nudEssenceDecimals.Value);
-                _characterOptions.DroneArmorMultiplier = decimal.ToInt32(nudDroneArmorMultiplier.Value);
-                _characterOptions.FreeKnowledgeMultiplier = decimal.ToInt32(nudKnowledgeMultiplier.Value);
-                _characterOptions.MetatypeCostsKarmaMultiplier = decimal.ToInt32(nudMetatypeCostsKarmaMultiplier.Value);
-                _characterOptions.NuyenPerBP = decimal.ToInt32(nudKarmaNuyenPer.Value);
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                Log.Error(ex.Message);
-            }
 
             _characterOptions.DontRoundEssenceInternally = chkDontRoundEssenceInternally.Checked;
             _characterOptions.ESSLossReducesMaximumOnly = chkESSLossReducesMaximumOnly.Checked;
@@ -235,6 +222,13 @@ namespace Chummer
 
             try
             {
+                _characterOptions.FreeContactsMultiplier = decimal.ToInt32(nudContactMultiplier.Value);
+                _characterOptions.EssenceDecimals = decimal.ToInt32(nudEssenceDecimals.Value);
+                _characterOptions.DroneArmorMultiplier = decimal.ToInt32(nudDroneArmorMultiplier.Value);
+                _characterOptions.FreeKnowledgeMultiplier = decimal.ToInt32(nudKnowledgeMultiplier.Value);
+                _characterOptions.MetatypeCostsKarmaMultiplier = decimal.ToInt32(nudMetatypeCostsKarmaMultiplier.Value);
+                _characterOptions.NuyenPerBP = decimal.ToInt32(nudKarmaNuyenPer.Value);
+
                 StringBuilder objNuyenFormat = new StringBuilder("#,0");
                 int intNuyenDecimalPlacesMaximum = decimal.ToInt32(nudNuyenDecimalsMaximum.Value);
                 int intNuyenDecimalPlacesMinimum = decimal.ToInt32(nudNuyenDecimalsMinimum.Value);
@@ -262,7 +256,6 @@ namespace Chummer
                 _characterOptions.KarmaImproveSkillGroup = decimal.ToInt32(nudKarmaImproveSkillGroup.Value);
                 _characterOptions.KarmaSpell = decimal.ToInt32(nudKarmaSpell.Value);
                 _characterOptions.KarmaNewComplexForm = decimal.ToInt32(nudKarmaNewComplexForm.Value);
-                _characterOptions.KarmaImproveComplexForm = decimal.ToInt32(nudKarmaImproveComplexForm.Value);
                 _characterOptions.KarmaNewAIProgram = decimal.ToInt32(nudKarmaNewAIProgram.Value);
                 _characterOptions.KarmaNewAIAdvancedProgram = decimal.ToInt32(nudKarmaNewAIAdvancedProgram.Value);
                 _characterOptions.KarmaMetamagic = decimal.ToInt32(nudKarmaMetamagic.Value);
@@ -271,11 +264,9 @@ namespace Chummer
                 _characterOptions.KarmaEnemy = decimal.ToInt32(nudKarmaEnemy.Value);
                 _characterOptions.KarmaCarryover = decimal.ToInt32(nudKarmaCarryover.Value);
                 _characterOptions.KarmaSpirit = decimal.ToInt32(nudKarmaSpirit.Value);
-                _characterOptions.KarmaManeuver = decimal.ToInt32(nudKarmaManeuver.Value);
+                _characterOptions.KarmaTechnique = decimal.ToInt32(nudKarmaTechnique.Value);
                 _characterOptions.KarmaInitiation = decimal.ToInt32(nudKarmaInitiation.Value);
                 _characterOptions.KarmaInitiationFlat = decimal.ToInt32(nudKarmaInitiationFlat.Value);
-                _characterOptions.KarmaComplexFormOption = decimal.ToInt32(nudKarmaComplexFormOption.Value);
-                _characterOptions.KarmaComplexFormSkillsoft = decimal.ToInt32(nudKarmaComplexFormSkillsoft.Value);
                 _characterOptions.KarmaJoinGroup = decimal.ToInt32(nudKarmaJoinGroup.Value);
                 _characterOptions.KarmaLeaveGroup = decimal.ToInt32(nudKarmaLeaveGroup.Value);
                 _characterOptions.KarmaMysticAdeptPowerPoint = (int) nudKarmaMysticAdeptPowerPoint.Value;
@@ -576,12 +567,10 @@ namespace Chummer
             SetToolTips();
 
             string strSheetLanguage = cboSheetLanguage.SelectedValue?.ToString();
-            if(strSheetLanguage != _strSelectedLanguage)
+            if(strSheetLanguage != _strSelectedLanguage
+               && cboSheetLanguage.Items.Cast<ListItem>().Any(x => x.Value.ToString() == _strSelectedLanguage))
             {
-                if(cboSheetLanguage.Items.Cast<ListItem>().Any(x => x.Value.ToString() == _strSelectedLanguage))
-                {
-                    cboSheetLanguage.SelectedValue = _strSelectedLanguage;
-                }
+                cboSheetLanguage.SelectedValue = _strSelectedLanguage;
             }
 
             PopulatePDFParameters();
@@ -818,17 +807,14 @@ namespace Chummer
             nudKarmaImproveSkillGroup.Value = _characterOptions.KarmaImproveSkillGroup;
             nudKarmaSpell.Value = _characterOptions.KarmaSpell;
             nudKarmaNewComplexForm.Value = _characterOptions.KarmaNewComplexForm;
-            nudKarmaImproveComplexForm.Value = _characterOptions.KarmaImproveComplexForm;
             nudKarmaNewAIProgram.Value = _characterOptions.KarmaNewAIProgram;
             nudKarmaNewAIAdvancedProgram.Value = _characterOptions.KarmaNewAIAdvancedProgram;
-            nudKarmaComplexFormOption.Value = _characterOptions.KarmaComplexFormOption;
-            nudKarmaComplexFormSkillsoft.Value = _characterOptions.KarmaComplexFormSkillsoft;
             nudKarmaNuyenPer.Value = _characterOptions.KarmaNuyenPer;
             nudKarmaContact.Value = _characterOptions.KarmaContact;
             nudKarmaEnemy.Value = _characterOptions.KarmaEnemy;
             nudKarmaCarryover.Value = _characterOptions.KarmaCarryover;
             nudKarmaSpirit.Value = _characterOptions.KarmaSpirit;
-            nudKarmaManeuver.Value = _characterOptions.KarmaManeuver;
+            nudKarmaTechnique.Value = _characterOptions.KarmaTechnique;
             nudKarmaInitiation.Value = _characterOptions.KarmaInitiation;
             nudKarmaInitiationFlat.Value = _characterOptions.KarmaInitiationFlat;
             nudKarmaMetamagic.Value = _characterOptions.KarmaMetamagic;
@@ -886,7 +872,6 @@ namespace Chummer
             GlobalOptions.PDFAppPath = txtPDFAppPath.Text;
             GlobalOptions.PDFParameters = cboPDFParameters.SelectedValue?.ToString() ?? string.Empty;
             GlobalOptions.LifeModuleEnabled = chkLifeModule.Checked;
-            GlobalOptions.OmaeEnabled = chkOmaeEnabled.Checked;
             GlobalOptions.PreferNightlyBuilds = chkPreferNightlyBuilds.Checked;
             GlobalOptions.Dronemods = chkDronemods.Checked;
             GlobalOptions.DronemodsMaximumPilot = chkDronemodsMaximumPilot.Checked;
@@ -896,6 +881,10 @@ namespace Chummer
             GlobalOptions.CreateBackupOnCareer = chkCreateBackupOnCareer.Checked;
             GlobalOptions.DefaultBuildMethod = cboBuildMethod.SelectedValue?.ToString() ?? GlobalOptions.DefaultBuildMethodDefaultValue;
             GlobalOptions.DefaultGameplayOption = XmlManager.Load("gameplayoptions.xml", _strSelectedLanguage).SelectSingleNode("/chummer/gameplayoptions/gameplayoption[id = \"" + cboDefaultGameplayOption.SelectedValue + "\"]/name")?.InnerText ?? GlobalOptions.DefaultGameplayOptionDefaultValue;
+            GlobalOptions.AllowEasterEggs = chkAllowEasterEggs.Checked;
+            GlobalOptions.CustomDateTimeFormats = chkCustomDateTimeFormats.Checked;
+            GlobalOptions.CustomDateFormat = txtDateFormat.Text;
+            GlobalOptions.CustomTimeFormat = txtTimeFormat.Text;
             GlobalOptions.PluginsEnabled = chkEnablePlugins.Enabled;
             GlobalOptions.SavedImageQuality = nudMugshotCompressionQuality.Enabled ? decimal.ToInt32(nudMugshotCompressionQuality.Value) : int.MaxValue;
         }
@@ -929,7 +918,6 @@ namespace Chummer
                     objRegistry.SetValue("pdfapppath", txtPDFAppPath.Text);
                     objRegistry.SetValue("pdfparameters", cboPDFParameters.SelectedValue.ToString());
                     objRegistry.SetValue("lifemodule", chkLifeModule.Checked.ToString(GlobalOptions.InvariantCultureInfo));
-                    objRegistry.SetValue("omaeenabled", chkOmaeEnabled.Checked.ToString(GlobalOptions.InvariantCultureInfo));
                     objRegistry.SetValue("prefernightlybuilds", chkPreferNightlyBuilds.Checked.ToString(GlobalOptions.InvariantCultureInfo));
                     objRegistry.SetValue("dronemods", chkDronemods.Checked.ToString(GlobalOptions.InvariantCultureInfo));
                     objRegistry.SetValue("dronemodsPilot", chkDronemodsMaximumPilot.Checked.ToString(GlobalOptions.InvariantCultureInfo));
@@ -1060,13 +1048,10 @@ namespace Chummer
             nudKarmaQuality.Value = 1;
             nudKarmaSpell.Value = 5;
             nudKarmaNewComplexForm.Value = 4;
-            nudKarmaImproveComplexForm.Value = 1;
             nudKarmaNewAIProgram.Value = 5;
             nudKarmaNewAIAdvancedProgram.Value = 8;
-            nudKarmaComplexFormOption.Value = 2;
-            nudKarmaComplexFormSkillsoft.Value = 1;
             nudKarmaSpirit.Value = 1;
-            nudKarmaManeuver.Value = 4;
+            nudKarmaTechnique.Value = 4;
             nudKarmaNuyenPer.Value = 2000;
             nudKarmaContact.Value = 1;
             nudKarmaEnemy.Value = 1;
@@ -1542,7 +1527,6 @@ namespace Chummer
             PopulateColorModes();
 
             chkLifeModule.Checked = GlobalOptions.LifeModuleEnabled;
-            chkOmaeEnabled.Checked = GlobalOptions.OmaeEnabled;
             chkPreferNightlyBuilds.Checked = GlobalOptions.PreferNightlyBuilds;
             chkStartupFullscreen.Checked = GlobalOptions.StartupFullscreen;
             chkSingleDiceRoller.Checked = GlobalOptions.SingleDiceRoller;
@@ -1608,35 +1592,12 @@ namespace Chummer
             return lstSheets;
         }
 
-        private static List<ListItem> GetXslFilesFromOmaeDirectory(string strLanguage)
-        {
-            List<ListItem> lstItems = new List<ListItem>(5);
-
-            // Populate the XSLT list with all of the XSL files found in the sheets\omae directory.
-            string omaeDirectoryPath = Path.Combine(Utils.GetStartupPath, "sheets", "omae");
-            string menuMainOmae = LanguageManager.GetString("Menu_Main_Omae", strLanguage);
-
-            // Only show files that end in .xsl. Do not include files that end in .xslt since they are used as "hidden" reference sheets
-            // (hidden because they are partial templates that cannot be used on their own).
-            foreach(string fileName in ReadXslFileNamesWithoutExtensionFromDirectory(omaeDirectoryPath))
-            {
-                lstItems.Add(new ListItem(Path.Combine("omae", fileName), menuMainOmae + LanguageManager.GetString("String_Colon", strLanguage) + LanguageManager.GetString("String_Space", strLanguage) + fileName));
-            }
-
-            return lstItems;
-        }
-
         private void PopulateXsltList()
         {
             string strSelectedSheetLanguage = cboSheetLanguage.SelectedValue?.ToString();
             imgSheetLanguageFlag.Image = FlagImageGetter.GetFlagFromCountryCode(strSelectedSheetLanguage?.Substring(3, 2));
 
             List<ListItem> lstFiles = GetXslFilesFromLocalDirectory(strSelectedSheetLanguage);
-            if(GlobalOptions.OmaeEnabled)
-            {
-                foreach(ListItem objFile in GetXslFilesFromOmaeDirectory(strSelectedSheetLanguage))
-                    lstFiles.Add(objFile);
-            }
 
             string strOldSelected = cboXSLT.SelectedValue?.ToString() ?? string.Empty;
             // Strip away the language prefix
@@ -1798,18 +1759,6 @@ namespace Chummer
             if(Program.MainForm.ShowMessageBox(this, LanguageManager.GetString("Tip_LifeModule_Warning", _strSelectedLanguage), Application.ProductName,
                    MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
                 chkLifeModule.Checked = false;
-            else
-            {
-                OptionsChanged(sender, e);
-            }
-        }
-
-        private void chkOmaeEnabled_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!chkOmaeEnabled.Checked || _blnLoading) return;
-            if(Program.MainForm.ShowMessageBox(this, LanguageManager.GetString("Tip_Omae_Warning", _strSelectedLanguage), Application.ProductName,
-                   MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
-                chkOmaeEnabled.Checked = false;
             else
             {
                 OptionsChanged(sender, e);
@@ -2083,18 +2032,17 @@ namespace Chummer
             if (_blnLoading)
                 return;
             UseAILogging useAI = (UseAILogging) ((ListItem) cboUseLoggingApplicationInsights.SelectedItem).Value;
-            if (useAI > UseAILogging.Info && GlobalOptions.UseLoggingApplicationInsights <= UseAILogging.Info)
-            {
-                if (DialogResult.Yes != Program.MainForm.ShowMessageBox(this,
+            if (useAI > UseAILogging.Info
+                && GlobalOptions.UseLoggingApplicationInsights <= UseAILogging.Info
+                && DialogResult.Yes != Program.MainForm.ShowMessageBox(this,
                     LanguageManager.GetString("Message_Options_ConfirmTelemetry", _strSelectedLanguage).WordWrap(),
                     LanguageManager.GetString("MessageTitle_Options_ConfirmTelemetry", _strSelectedLanguage),
                     MessageBoxButtons.YesNo))
-                {
-                    _blnLoading = true;
-                    cboUseLoggingApplicationInsights.SelectedItem = UseAILogging.Info;
-                    _blnLoading = false;
-                    return;
-                }
+            {
+                _blnLoading = true;
+                cboUseLoggingApplicationInsights.SelectedItem = UseAILogging.Info;
+                _blnLoading = false;
+                return;
             }
             OptionsChanged(sender, e);
         }

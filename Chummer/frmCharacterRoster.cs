@@ -45,9 +45,11 @@ namespace Chummer
 
         private readonly FileSystemWatcher watcherCharacterRosterFolder;
         private bool _blnSkipUpdate = true;
+        private readonly Graphics _objGraphics;
 
         public frmCharacterRoster()
         {
+            _objGraphics = CreateGraphics();
             InitializeComponent();
             this.UpdateLightDarkMode();
             this.TranslateWinForm();
@@ -134,7 +136,6 @@ namespace Chummer
                 {
                     treCharacterList.Nodes.Clear();
                     LoadCharacters(true, true, true, false);
-                    GC.Collect();
                 }
                 catch (ObjectDisposedException)
                 {
@@ -725,9 +726,19 @@ namespace Chummer
 
         private void ProcessMugshotSizeMode()
         {
-            picMugshot.SizeMode = picMugshot.Image != null && picMugshot.Height >= picMugshot.Image.Height && picMugshot.Width >= picMugshot.Image.Width
-                ? PictureBoxSizeMode.CenterImage
-                : PictureBoxSizeMode.Zoom;
+            if (!Disposing && !picMugshot.Disposing && !picMugshot.IsDisposed)
+            {
+                try
+                {
+                    picMugshot.SizeMode = picMugshot.Image != null && picMugshot.Height >= picMugshot.Image.Height && picMugshot.Width >= picMugshot.Image.Width
+                        ? PictureBoxSizeMode.CenterImage
+                        : PictureBoxSizeMode.Zoom;
+                }
+                catch (ArgumentException) // No other way to catch when the Image is not null, but is disposed
+                {
+                    picMugshot.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+            }
         }
         #endregion
 
@@ -874,11 +885,8 @@ namespace Chummer
         {
             int intToolStripWidth = 180;
             int intToolStripHeight = 22;
-            using (Graphics g = CreateGraphics())
-            {
-                intToolStripWidth = (int)(intToolStripWidth * g.DpiX / 96.0f);
-                intToolStripHeight = (int)(intToolStripHeight * g.DpiY / 96.0f);
-            }
+            intToolStripWidth = (int)(intToolStripWidth * _objGraphics.DpiX / 96.0f);
+            intToolStripHeight = (int)(intToolStripHeight * _objGraphics.DpiY / 96.0f);
             // 
             // tsToggleFav
             //

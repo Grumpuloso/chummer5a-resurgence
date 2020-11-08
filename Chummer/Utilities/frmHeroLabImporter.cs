@@ -448,10 +448,19 @@ namespace Chummer
 
         private void picMugshot_SizeChanged(object sender, EventArgs e)
         {
-            if (picMugshot.Image != null && picMugshot.Height >= picMugshot.Image.Height && picMugshot.Width >= picMugshot.Image.Width)
-                picMugshot.SizeMode = PictureBoxSizeMode.CenterImage;
-            else
-                picMugshot.SizeMode = PictureBoxSizeMode.Zoom;
+            if (!Disposing && !picMugshot.Disposing && !picMugshot.IsDisposed)
+            {
+                try
+                {
+                    picMugshot.SizeMode = picMugshot.Image != null && picMugshot.Height >= picMugshot.Image.Height && picMugshot.Width >= picMugshot.Image.Width
+                        ? PictureBoxSizeMode.CenterImage
+                        : PictureBoxSizeMode.Zoom;
+                }
+                catch (ArgumentException) // No other way to catch when the Image is not null, but is disposed
+                {
+                    picMugshot.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+            }
         }
         #endregion
 
@@ -468,14 +477,12 @@ namespace Chummer
                     if (!string.IsNullOrEmpty(strFile) && !string.IsNullOrEmpty(strCharacterId))
                     {
                         string strFilePath = Path.Combine(Application.StartupPath, "settings", "default.xml");
-                        if (!File.Exists(strFilePath))
+                        if (!File.Exists(strFilePath)
+                            && Program.MainForm.ShowMessageBox(this, LanguageManager.GetString("Message_CharacterOptions_OpenOptions"), LanguageManager.GetString("MessageTitle_CharacterOptions_OpenOptions"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            if (Program.MainForm.ShowMessageBox(this, LanguageManager.GetString("Message_CharacterOptions_OpenOptions"), LanguageManager.GetString("MessageTitle_CharacterOptions_OpenOptions"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                            {
-                                using (new CursorWait(this))
-                                    using (frmOptions frmOptions = new frmOptions())
-                                        frmOptions.ShowDialog(this);
-                            }
+                            using (new CursorWait(this))
+                                using (frmOptions frmOptions = new frmOptions())
+                                    frmOptions.ShowDialog(this);
                         }
 
                         using (new CursorWait(this))

@@ -286,12 +286,6 @@ namespace Chummer
 
         public static ThreadSafeRandom RandomGenerator { get; } = new ThreadSafeRandom(new XoRoShiRo128starstar());
 
-        // Omae Information.
-        private static bool _omaeEnabled;
-        private static string _strOmaeUserName = string.Empty;
-        private static string _strOmaePassword = string.Empty;
-        private static bool _blnOmaeAutoLogin;
-
         // Plugins information
         public static Dictionary<string, bool> PluginsEnabledDic { get; } = new Dictionary<string, bool>();
 
@@ -448,36 +442,33 @@ namespace Chummer
             LoadBoolFromRegistry(ref _blnLiveCustomData, "livecustomdata");
             LoadBoolFromRegistry(ref _blnLiveUpdateCleanCharacterFiles, "liveupdatecleancharacterfiles");
             LoadBoolFromRegistry(ref _lifeModuleEnabled, "lifemodule");
-            LoadBoolFromRegistry(ref _omaeEnabled, "omaeenabled");
 
             // Whether or not the app should use logging.
             LoadBoolFromRegistry(ref _blnUseLogging, "uselogging");
 
             //Should the App "Phone home"
+            try
             {
-                try
+                string useAI = "NotSet";
+                LoadStringFromRegistry(ref useAI, "useloggingApplicationInsights");
+                switch (useAI)
                 {
-                    string useAI = "NotSet";
-                    LoadStringFromRegistry(ref useAI, "useloggingApplicationInsights");
-                    switch (useAI)
-                    {
-                        case "False":
-                            _enumUseLoggingApplicationInsights = UseAILogging.NotSet;
-                            break;
-                        case "True":
-                        case "Yes":
-                            _enumUseLoggingApplicationInsights = UseAILogging.Info;
-                            break;
-                        default:
-                            _enumUseLoggingApplicationInsights = (UseAILogging) Enum.Parse(typeof(UseAILogging), useAI);
-                            break;
-                    }
+                    case "False":
+                        _enumUseLoggingApplicationInsights = UseAILogging.NotSet;
+                        break;
+                    case "True":
+                    case "Yes":
+                        _enumUseLoggingApplicationInsights = UseAILogging.Info;
+                        break;
+                    default:
+                        _enumUseLoggingApplicationInsights = (UseAILogging) Enum.Parse(typeof(UseAILogging), useAI);
+                        break;
                 }
-                catch (Exception e)
-                {
-                    Log.Warn(e);
-                    _enumUseLoggingApplicationInsights = UseAILogging.NotSet;
-                }
+            }
+            catch (Exception e)
+            {
+                Log.Warn(e);
+                _enumUseLoggingApplicationInsights = UseAILogging.NotSet;
             }
 
             string strColorMode = string.Empty;
@@ -521,13 +512,6 @@ namespace Chummer
 
             LoadBoolFromRegistry(ref _blnAllowEasterEggs, "alloweastereggs");
 
-            // Omae Settings.
-            // Username.
-            LoadStringFromRegistry(ref _strOmaeUserName, "omaeusername");
-            // Password.
-            LoadStringFromRegistry(ref _strOmaePassword, "omaepassword");
-            // AutoLogin.
-            LoadBoolFromRegistry(ref _blnOmaeAutoLogin, "omaeautologin");
             // Language.
             string strLanguage = _strLanguage;
             if(LoadStringFromRegistry(ref strLanguage, "language"))
@@ -594,7 +578,7 @@ namespace Chummer
             // Prefer Nightly Updates.
             LoadBoolFromRegistry(ref _blnPreferNightlyUpdates, "prefernightlybuilds");
 
-            LoadBoolFromRegistry(ref _blnCustomDateTimeFormats, "customdatetimeformats");
+            LoadBoolFromRegistry(ref _blnCustomDateTimeFormats, "usecustomdatetime");
             LoadStringFromRegistry(ref _strCustomDateFormat, "customdateformat");
             LoadStringFromRegistry(ref _strCustomTimeFormat, "customtimeformat");
 
@@ -807,33 +791,6 @@ namespace Chummer
         {
             get => _intEmulatedBrowserVersion;
             set => _intEmulatedBrowserVersion = value;
-        }
-
-        /// <summary>
-        /// Omae user name.
-        /// </summary>
-        public static string OmaeUserName
-        {
-            get => _strOmaeUserName;
-            set => _strOmaeUserName = value;
-        }
-
-        /// <summary>
-        /// Omae password (Base64 encoded).
-        /// </summary>
-        public static string OmaePassword
-        {
-            get => _strOmaePassword;
-            set => _strOmaePassword = value;
-        }
-
-        /// <summary>
-        /// Omae AutoLogin.
-        /// </summary>
-        public static bool OmaeAutoLogin
-        {
-            get => _blnOmaeAutoLogin;
-            set => _blnOmaeAutoLogin = value;
         }
 
         /// <summary>
@@ -1099,12 +1056,6 @@ namespace Chummer
         /// </summary>
         public static List<CustomDataDirectoryInfo> CustomDataDirectoryInfo => _lstCustomDataDirectoryInfo;
 
-        public static bool OmaeEnabled
-        {
-            get => _omaeEnabled;
-            set => _omaeEnabled = value;
-        }
-
         /// <summary>
         /// Should the updater check for Release builds, or Nightly builds
         /// </summary>
@@ -1321,9 +1272,24 @@ namespace Chummer
         public static ObservableCollection<string> FavoritedCharacters => _lstFavoritedCharacters;
 
         public static ObservableCollection<string> MostRecentlyUsedCharacters => _lstMostRecentlyUsedCharacters;
-        public static bool CustomDateTimeFormats => _blnCustomDateTimeFormats;
-        public static string CustomDateFormat => _strCustomDateFormat;
-        public static string CustomTimeFormat => _strCustomTimeFormat;
+
+        public static bool CustomDateTimeFormats
+        {
+            get => _blnCustomDateTimeFormats;
+            set => _blnCustomDateTimeFormats = value;
+        }
+
+        public static string CustomDateFormat
+        {
+            get => _strCustomDateFormat;
+            set => _strCustomDateFormat = value;
+        }
+
+        public static string CustomTimeFormat
+        {
+            get => _strCustomTimeFormat;
+            set => _strCustomTimeFormat = value;
+        }
         /// <summary>
         /// Should the application assume that the Black Market Pipeline discount should automatically be used if the character has an appropriate contact?
         /// </summary>

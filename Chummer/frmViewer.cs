@@ -157,10 +157,9 @@ namespace Chummer
                 if (!_workerRefresher.IsBusy)
                     _workerRefresher.RunWorkerAsync();
             }
-            else if (_blnQueueOutputGeneratorRun)
+            else if (_blnQueueOutputGeneratorRun && !_workerOutputGenerator.IsBusy)
             {
-                if (!_workerOutputGenerator.IsBusy)
-                    _workerOutputGenerator.RunWorkerAsync();
+                _workerOutputGenerator.RunWorkerAsync();
             }
         }
 
@@ -602,24 +601,6 @@ namespace Chummer
             return lstSheets;
         }
 
-        private static List<ListItem> GetXslFilesFromOmaeDirectory()
-        {
-            List<ListItem> lstItems = new List<ListItem>(5);
-
-            // Populate the XSLT list with all of the XSL files found in the sheets\omae directory.
-            string omaeDirectoryPath = Path.Combine(Utils.GetStartupPath, "sheets", "omae");
-            string menuMainOmae = LanguageManager.GetString("Menu_Main_Omae");
-
-            // Only show files that end in .xsl. Do not include files that end in .xslt since they are used as "hidden" reference sheets
-            // (hidden because they are partial templates that cannot be used on their own).
-            foreach (string fileName in ReadXslFileNamesWithoutExtensionFromDirectory(omaeDirectoryPath))
-            {
-                lstItems.Add(new ListItem(Path.Combine("omae", fileName), menuMainOmae + LanguageManager.GetString("String_Colon") + LanguageManager.GetString("String_Space") + fileName));
-            }
-
-            return lstItems;
-        }
-
         private static List<string> ReadXslFileNamesWithoutExtensionFromDirectory(string path)
         {
             if (Directory.Exists(path))
@@ -633,11 +614,6 @@ namespace Chummer
         private void PopulateXsltList()
         {
             List<ListItem> lstFiles = GetXslFilesFromLocalDirectory(cboLanguage.SelectedValue?.ToString() ?? GlobalOptions.DefaultLanguage);
-            if (GlobalOptions.OmaeEnabled)
-            {
-                foreach (ListItem objFile in GetXslFilesFromOmaeDirectory())
-                    lstFiles.Add(objFile);
-            }
 
             cboXSLT.BeginUpdate();
             cboXSLT.ValueMember = nameof(ListItem.Value);

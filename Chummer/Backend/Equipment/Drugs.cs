@@ -44,7 +44,7 @@ namespace Chummer.Backend.Equipment
         private string _strDuration;
         private string _strDescription = string.Empty;
         private string _strEffectDescription = string.Empty;
-        private Dictionary<string, int> _dicCachedAttributes = new Dictionary<string, int>();
+        private Dictionary<string, decimal> _dicCachedAttributes = new Dictionary<string, decimal>();
         private List<string> _lstCachedInfos = new List<string>();
         private Dictionary<string, int> _dicCachedLimits = new Dictionary<string, int>();
         private List<XmlNode> _lstCachedQualities = new List<XmlNode>();
@@ -178,7 +178,8 @@ namespace Chummer.Backend.Equipment
                 objXmlWriter.WriteElementString("rating", _intAddictionRating.ToString(GlobalOptions.InvariantCultureInfo));
             if (_intAddictionThreshold != 0)
                 objXmlWriter.WriteElementString("threshold", _intAddictionThreshold.ToString(GlobalOptions.InvariantCultureInfo));
-            objXmlWriter.WriteElementString("grade", Grade.Name);
+            if (Grade != null)
+                objXmlWriter.WriteElementString("grade", Grade.Name);
             objXmlWriter.WriteElementString("sortorder", _intSortOrder.ToString(GlobalOptions.InvariantCultureInfo));
             objXmlWriter.WriteElementString("stolen", _blnStolen.ToString(GlobalOptions.InvariantCultureInfo));
             objXmlWriter.WriteElementString("source", _strSource);
@@ -217,14 +218,14 @@ namespace Chummer.Backend.Equipment
             objWriter.WriteElementString("cost", TotalCost.ToString(_objCharacter.Options.NuyenFormat, objCulture));
 
             objWriter.WriteStartElement("attributes");
-            foreach (KeyValuePair<string, int> objAttribute in Attributes)
+            foreach (KeyValuePair<string, decimal> objAttribute in Attributes)
             {
                 if (objAttribute.Value != 0)
                 {
                     objWriter.WriteStartElement("attribute");
                     objWriter.WriteElementString("name", LanguageManager.GetString("String_Attribute" + objAttribute.Key + "Short", strLanguageToPrint));
                     objWriter.WriteElementString("name_english", objAttribute.Key);
-                    objWriter.WriteElementString("value", objAttribute.Value.ToString("+#;-#", objCulture));
+                    objWriter.WriteElementString("value", objAttribute.Value.ToString("+#.#;-#.#", objCulture));
                     objWriter.WriteEndElement();
                 }
             }
@@ -568,41 +569,36 @@ namespace Chummer.Backend.Equipment
         {
             get
             {
-                if (_intCachedDuration != int.MinValue) return _intCachedDuration;
-                if (!string.IsNullOrWhiteSpace(_strDuration))
-                {
-                    StringBuilder sbdDrain = new StringBuilder(_strDuration);
-                    foreach (string strAttribute in AttributeSection.AttributeStrings)
-                    {
-                        CharacterAttrib objAttrib = _objCharacter.GetAttribute(strAttribute);
-                        sbdDrain.CheapReplace(_strDuration, objAttrib.Abbrev,
-                            () => objAttrib.TotalValue.ToString(GlobalOptions.InvariantCultureInfo));
-                    }
-
-                    string strDuration = sbdDrain.ToString();
-                    if (!int.TryParse(strDuration, out int intDuration))
-                    {
-                        object objProcess = CommonFunctions.EvaluateInvariantXPath(strDuration, out bool blnIsSuccess);
-                        if (blnIsSuccess)
-                            intDuration = Convert.ToInt32(objProcess, GlobalOptions.InvariantCultureInfo);
-                    }
-
-                    _intCachedDuration = intDuration;
-                }
-                else
-                {
-                    _intCachedDuration = 0;
-                }
-
-                _intCachedDuration += Components.Where(d => d.ActiveDrugEffect != null).Sum(d => d.ActiveDrugEffect.Duration) + ImprovementManager.ValueOf(_objCharacter, Improvement.ImprovementType.DrugDuration);
-                if (ImprovementManager.ValueOf(_objCharacter, Improvement.ImprovementType.DrugDurationMultiplier) == 0)
+                if (_intCachedDuration != int.MinValue)
                     return _intCachedDuration;
+                if (string.IsNullOrWhiteSpace(_strDuration))
+                    return _intCachedDuration = 0;
+
+                StringBuilder sbdDrain = new StringBuilder(_strDuration);
+                foreach (string strAttribute in AttributeSection.AttributeStrings)
+                {
+                    CharacterAttrib objAttrib = _objCharacter.GetAttribute(strAttribute);
+                    sbdDrain.CheapReplace(_strDuration, objAttrib.Abbrev,
+                        () => objAttrib.TotalValue.ToString(GlobalOptions.InvariantCultureInfo));
+                }
+
+                string strDuration = sbdDrain.ToString();
+                if (!decimal.TryParse(strDuration, out decimal decDuration))
+                {
+                    object objProcess = CommonFunctions.EvaluateInvariantXPath(strDuration, out bool blnIsSuccess);
+                    if (blnIsSuccess)
+                        decDuration = Convert.ToDecimal(objProcess, GlobalOptions.InvariantCultureInfo);
+                }
+
+                decDuration += Components.Where(d => d.ActiveDrugEffect != null).Sum(d => d.ActiveDrugEffect.Duration) +
+                               ImprovementManager.ValueOf(_objCharacter, Improvement.ImprovementType.DrugDuration);
+                if (ImprovementManager.ValueOf(_objCharacter, Improvement.ImprovementType.DrugDurationMultiplier) == 0)
+                    return _intCachedDuration = decimal.ToInt32(decimal.Ceiling(decDuration));
                 decimal decMultiplier = 1;
                 decMultiplier = _objCharacter.Improvements
                     .Where(objImprovement => objImprovement.ImproveType == Improvement.ImprovementType.DrugDurationMultiplier && objImprovement.Enabled)
                     .Aggregate(decMultiplier, (current, objImprovement) => current - (1m - objImprovement.Value / 100m));
-                _intCachedDuration *= Convert.ToInt32(1.0m - decMultiplier);
-                return _intCachedDuration;
+                return _intCachedDuration = decimal.ToInt32(decimal.Ceiling(decDuration * (1.0m - decMultiplier)));
             }
         }
 
@@ -685,20 +681,20 @@ namespace Chummer.Backend.Equipment
 
         public string CurrentDisplayName => DisplayName(GlobalOptions.CultureInfo, GlobalOptions.Language);
 
-        public Dictionary<string, int> Attributes
+        public Dictionary<string, decimal> Attributes
         {
             get
             {
                 if (_blnCachedAttributeFlag)
                     return _dicCachedAttributes;
-                _dicCachedAttributes = new Dictionary<string, int>();
+                _dicCachedAttributes = new Dictionary<string, decimal>();
                 foreach (DrugComponent objComponent in Components)
                 {
                     foreach (DrugEffect objDrugEffect in objComponent.DrugEffects)
                     {
                         if (objDrugEffect.Level == objComponent.Level && objDrugEffect.Attributes.Count > 0)
                         {
-                            foreach (KeyValuePair<string, int> objAttributeEntry in objDrugEffect.Attributes)
+                            foreach (KeyValuePair<string, decimal> objAttributeEntry in objDrugEffect.Attributes)
                             {
                                 if (_dicCachedAttributes.ContainsKey(objAttributeEntry.Key))
                                     _dicCachedAttributes[objAttributeEntry.Key] += objAttributeEntry.Value;
@@ -781,7 +777,7 @@ namespace Chummer.Backend.Equipment
 
             if (intLevel != -1)
             {
-                foreach (KeyValuePair<string, int> objAttribute in Attributes)
+                foreach (KeyValuePair<string, decimal> objAttribute in Attributes)
                 {
                     if (objAttribute.Value != 0)
                     {
@@ -791,7 +787,7 @@ namespace Chummer.Backend.Equipment
                         }
 
                         sbdDescription.Append(LanguageManager.GetString("String_Attribute" + objAttribute.Key + "Short", strLanguage))
-                            .Append(strSpaceString).Append(objAttribute.Value.ToString("+#;-#", GlobalOptions.CultureInfo));
+                            .Append(strSpaceString).Append(objAttribute.Value.ToString("+#.#;-#.#", GlobalOptions.CultureInfo));
                         blnNewLineFlag = true;
                     }
                 }
@@ -1075,7 +1071,7 @@ namespace Chummer.Backend.Equipment
 
         public DrugComponent(Character objCharacter)
         {
-            _guidId = new Guid();
+            _guidId = Guid.NewGuid();
             _objCharacter = objCharacter;
         }
 
@@ -1191,7 +1187,7 @@ namespace Chummer.Backend.Equipment
             foreach (DrugEffect objDrugEffect in DrugEffects)
             {
                 objXmlWriter.WriteStartElement("effect");
-                foreach (KeyValuePair<string, int> objAttribute in objDrugEffect.Attributes)
+                foreach (KeyValuePair<string, decimal> objAttribute in objDrugEffect.Attributes)
                 {
                     objXmlWriter.WriteStartElement("attribute");
                     objXmlWriter.WriteElementString("name", objAttribute.Key);
@@ -1495,7 +1491,7 @@ namespace Chummer.Backend.Equipment
             {
                 DrugEffect objDrugEffect = DrugEffects[intLevel];
 
-                foreach (KeyValuePair<string, int> objAttribute in objDrugEffect.Attributes)
+                foreach (KeyValuePair<string, decimal> objAttribute in objDrugEffect.Attributes)
                 {
                     if (objAttribute.Value != 0)
                     {
@@ -1617,17 +1613,17 @@ namespace Chummer.Backend.Equipment
     /// <summary>
     /// Drug Effect
     /// </summary>
-    public class DrugEffect : object
+    public class DrugEffect
     {
         public DrugEffect()
         {
-            Attributes = new Dictionary<string, int>();
+            Attributes = new Dictionary<string, decimal>();
             Limits = new Dictionary<string, int>();
             Qualities = new List<XmlNode>();
             Infos = new List<string>();
         }
 
-        public Dictionary<string, int> Attributes { get; }
+        public Dictionary<string, decimal> Attributes { get; }
 
         public Dictionary<string, int> Limits { get; }
 

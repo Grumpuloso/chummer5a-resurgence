@@ -1263,7 +1263,6 @@ namespace Chummer.Backend.Equipment
             objWriter.WriteElementString("category_english", Category);
             objWriter.WriteElementString("iscommlink", IsCommlink.ToString(GlobalOptions.InvariantCultureInfo));
             objWriter.WriteElementString("ispersona", (Name == "Living Persona").ToString(GlobalOptions.InvariantCultureInfo));
-            //objWriter.WriteElementString("isnexus", (Category == "Nexus").ToString());
             objWriter.WriteElementString("isammo", (Category == "Ammunition").ToString(GlobalOptions.InvariantCultureInfo));
             objWriter.WriteElementString("isprogram", IsProgram.ToString(GlobalOptions.InvariantCultureInfo));
             objWriter.WriteElementString("isos", bool.FalseString);
@@ -2811,19 +2810,14 @@ namespace Chummer.Backend.Equipment
         {
             if (objOtherGear == null)
                 return false;
-            if (Name == objOtherGear.Name &&
-                Category == objOtherGear.Category &&
-                Rating == objOtherGear.Rating &&
-                Extra == objOtherGear.Extra &&
-                GearName == objOtherGear.GearName &&
-                Notes == objOtherGear.Notes)
-            {
-                if (Children.DeepMatch(objOtherGear.Children, x => x.Children, (x, y) => x.Quantity == y.Quantity && x.IsIdenticalToOtherGear(y)))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return Name == objOtherGear.Name
+                   && Category == objOtherGear.Category
+                   && Rating == objOtherGear.Rating
+                   && Extra == objOtherGear.Extra
+                   && GearName == objOtherGear.GearName
+                   && Notes == objOtherGear.Notes
+                   && Children.DeepMatch(objOtherGear.Children, x => x.Children, (x, y) => x.Quantity == y.Quantity
+                                                                                           && x.IsIdenticalToOtherGear(y));
         }
 
         /// <summary>
@@ -3589,7 +3583,7 @@ namespace Chummer.Backend.Equipment
                 decOriginal = TotalCost;
                 CharacterObject.Gear.Remove(this);
             }
-            else if (Parent != null && Parent is IHasChildrenAndCost<Gear> parentObject)
+            else if (Parent is IHasChildrenAndCost<Gear> parentObject)
             {
                 decOriginal = parentObject.TotalCost;
                 parentObject.Children.Remove(this);
@@ -3634,7 +3628,7 @@ namespace Chummer.Backend.Equipment
                 }
             }
 
-            if ((lstNamesOfChangedProperties?.Count > 0) != true)
+            if (lstNamesOfChangedProperties == null || lstNamesOfChangedProperties.Count == 0)
                 return;
 
             foreach (string strPropertyToChange in lstNamesOfChangedProperties)

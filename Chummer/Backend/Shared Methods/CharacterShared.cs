@@ -98,6 +98,11 @@ namespace Chummer
                 Control = objControl;
             }
 
+            public bool Equals(TransportWrapper other)
+            {
+                return Control.Equals(other.Control);
+            }
+
             public override bool Equals(object obj)
             {
                 return Control.Equals(obj);
@@ -132,11 +137,6 @@ namespace Chummer
             {
                 return Control.ToString();
             }
-
-            public bool Equals(TransportWrapper other)
-            {
-                return Control.Equals(other.Control);
-            }
         }
 
         protected Stopwatch AutosaveStopWatch { get; } = Stopwatch.StartNew();
@@ -147,44 +147,48 @@ namespace Chummer
         {
             using (new CursorWait(this))
             {
-                string strAutosavePath;
                 try
                 {
-                    strAutosavePath = Path.Combine(Utils.GetStartupPath, "saves", "autosave");
-                }
-                catch (ArgumentException e)
-                {
-                    Log.Error(e, "Path: " + Utils.GetStartupPath);
-                    return;
-                }
-
-                if (!Directory.Exists(strAutosavePath))
-                {
+                    string strAutosavePath;
                     try
                     {
-                        Directory.CreateDirectory(strAutosavePath);
+                        strAutosavePath = Path.Combine(Utils.GetStartupPath, "saves", "autosave");
                     }
-                    catch (UnauthorizedAccessException)
+                    catch (ArgumentException e)
                     {
-                        Program.MainForm.ShowMessageBox(this, LanguageManager.GetString("Message_Insufficient_Permissions_Warning"));
-                        AutosaveStopWatch.Restart();
+                        Log.Error(e, "Path: " + Utils.GetStartupPath);
                         return;
                     }
+
+                    if (!Directory.Exists(strAutosavePath))
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(strAutosavePath);
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            Program.MainForm.ShowMessageBox(this, LanguageManager.GetString("Message_Insufficient_Permissions_Warning"));
+                            return;
+                        }
+                    }
+
+                    string strShowFileName = _objCharacter.FileName.SplitNoAlloc(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+
+                    if (string.IsNullOrEmpty(strShowFileName))
+                        strShowFileName = _objCharacter.CharacterName;
+                    foreach (var invalidChar in Path.GetInvalidFileNameChars())
+                    {
+                        strShowFileName = strShowFileName.Replace(invalidChar, '_');
+                    }
+
+                    string strFilePath = Path.Combine(strAutosavePath, strShowFileName);
+                    _objCharacter.Save(strFilePath, false, false);
                 }
-
-                string strShowFileName = _objCharacter.FileName.SplitNoAlloc(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
-
-                if (string.IsNullOrEmpty(strShowFileName))
-                    strShowFileName = _objCharacter.CharacterName;
-                var replaceChars = Path.GetInvalidFileNameChars();
-                foreach (var invalidChar in replaceChars)
+                finally
                 {
-                    strShowFileName = strShowFileName.Replace(invalidChar, '_');
+                    AutosaveStopWatch.Restart();
                 }
-
-                string strFilePath = Path.Combine(strAutosavePath, strShowFileName);
-                _objCharacter.Save(strFilePath, false, false);
-                AutosaveStopWatch.Restart();
             }
         }
 
@@ -2899,20 +2903,6 @@ namespace Chummer
                         }
                         break;
                     case NotifyCollectionChangedAction.Replace:
-                        {
-                            foreach (Drug d in notifyCollectionChangedEventArgs.OldItems)
-                            {
-                                treGear.FindNodeByTag(d)?.Remove();
-                            }
-                            int intNewIndex = notifyCollectionChangedEventArgs.NewStartingIndex;
-                            foreach (Drug d in notifyCollectionChangedEventArgs.NewItems)
-                            {
-                                AddToTree(d, intNewIndex);
-                                intNewIndex += 1;
-                            }
-                            treGear.SelectedNode = treGear.FindNode(strSelectedId);
-                        }
-                        break;
                     case NotifyCollectionChangedAction.Move:
                         {
                             foreach (Drug d in notifyCollectionChangedEventArgs.OldItems)
@@ -3112,8 +3102,10 @@ namespace Chummer
                                 Tag = "Node_UnequippedModularCyberware",
                                 Text = LanguageManager.GetString("Node_UnequippedModularCyberware")
                             };
-                            treCyberware.Nodes.Insert(objBiowareRoot == null && objCyberwareRoot == null ? 0 :
-                                (objBiowareRoot == null) != (objCyberwareRoot == null) ? 1 : 2, objModularRoot);
+                            int intIndex = 0;
+                            if (objBiowareRoot != null || objCyberwareRoot != null)
+                                intIndex = objBiowareRoot != null && objCyberwareRoot != null ? 2 : 1;
+                            treCyberware.Nodes.Insert(intIndex, objModularRoot);
                             objModularRoot.Expand();
                         }
                         nodParent = objModularRoot;
@@ -4893,10 +4885,7 @@ namespace Chummer
                                     break;
                                 ContactControl objContactControl = new ContactControl(objContact);
                                 // Attach an EventHandler for the ConnectionRatingChanged, LoyaltyRatingChanged, DeleteContact, FileNameChanged Events and OtherCostChanged
-                                if (_objCharacter.Created)
-                                    objContactControl.ContactDetailChanged += MakeDirtyWithCharacterUpdate;
-                                else
-                                    objContactControl.ContactDetailChanged += EnemyChanged;
+                                objContactControl.ContactDetailChanged += MakeDirtyWithCharacterUpdate;
                                 objContactControl.DeleteContact += DeleteEnemy;
                                 objContactControl.MouseDown += DragContactControl;
 
@@ -4942,8 +4931,6 @@ namespace Chummer
                                             objContactControl.DeleteContact += DeleteContact;
                                             objContactControl.MouseDown += DragContactControl;
 
-                                            objContactControl.Expanded = true; // Manually adding a contact = expand by default
-
                                             panContacts.Controls.Add(objContactControl);
                                         }
                                         break;
@@ -4953,10 +4940,7 @@ namespace Chummer
                                                 break;
                                             ContactControl objContactControl = new ContactControl(objLoopContact);
                                             // Attach an EventHandler for the ConnectionRatingChanged, LoyaltyRatingChanged, DeleteContact, FileNameChanged Events and OtherCostChanged
-                                            if (_objCharacter.Created)
-                                                objContactControl.ContactDetailChanged += MakeDirtyWithCharacterUpdate;
-                                            else
-                                                objContactControl.ContactDetailChanged += EnemyChanged;
+                                            objContactControl.ContactDetailChanged += MakeDirtyWithCharacterUpdate;
                                             objContactControl.DeleteContact += DeleteEnemy;
                                             //objContactControl.MouseDown += DragContactControl;
 
@@ -5012,10 +4996,7 @@ namespace Chummer
                                                 if (panEnemies.Controls[i] is ContactControl objContactControl && objContactControl.ContactObject == objLoopContact)
                                                 {
                                                     panEnemies.Controls.RemoveAt(i);
-                                                    if (_objCharacter.Created)
-                                                        objContactControl.ContactDetailChanged -= MakeDirtyWithCharacterUpdate;
-                                                    else
-                                                        objContactControl.ContactDetailChanged -= EnemyChanged;
+                                                    objContactControl.ContactDetailChanged -= MakeDirtyWithCharacterUpdate;
                                                     objContactControl.DeleteContact -= DeleteEnemy;
                                                     objContactControl.Dispose();
                                                 }
@@ -5074,10 +5055,7 @@ namespace Chummer
                                                 if (panEnemies.Controls[i] is ContactControl objContactControl && objContactControl.ContactObject == objLoopContact)
                                                 {
                                                     panEnemies.Controls.RemoveAt(i);
-                                                    if (_objCharacter.Created)
-                                                        objContactControl.ContactDetailChanged -= MakeDirtyWithCharacterUpdate;
-                                                    else
-                                                        objContactControl.ContactDetailChanged -= EnemyChanged;
+                                                    objContactControl.ContactDetailChanged -= MakeDirtyWithCharacterUpdate;
                                                     objContactControl.DeleteContact -= DeleteEnemy;
                                                     objContactControl.Dispose();
                                                 }
@@ -5116,8 +5094,6 @@ namespace Chummer
                                             objContactControl.DeleteContact += DeleteContact;
                                             objContactControl.MouseDown += DragContactControl;
 
-                                            objContactControl.Expanded = true; // Manually adding a contact = expand by default
-
                                             panContacts.Controls.Add(objContactControl);
                                         }
                                         break;
@@ -5127,10 +5103,7 @@ namespace Chummer
                                                 break;
                                             ContactControl objContactControl = new ContactControl(objLoopContact);
                                             // Attach an EventHandler for the ConnectionRatingChanged, LoyaltyRatingChanged, DeleteContact, FileNameChanged Events and OtherCostChanged
-                                            if (_objCharacter.Created)
-                                                objContactControl.ContactDetailChanged += MakeDirtyWithCharacterUpdate;
-                                            else
-                                                objContactControl.ContactDetailChanged += EnemyChanged;
+                                            objContactControl.ContactDetailChanged += MakeDirtyWithCharacterUpdate;
                                             objContactControl.DeleteContact += DeleteEnemy;
                                             //objContactControl.MouseDown += DragContactControl;
 
@@ -5700,93 +5673,6 @@ namespace Chummer
             IsDirty = true;
         }
 
-        protected void EnemyChanged(object sender, TextEventArgs e)
-        {
-            if (e == null)
-                throw new ArgumentNullException(nameof(e));
-            ContactControl objSenderControl = sender as ContactControl;
-
-            // Handle the ConnectionRatingChanged Event for the ContactControl object.
-            int intNegativeQualityBP = 0;
-            // Calculate the BP used for Negative Qualities.
-            foreach (Quality objQuality in CharacterObject.Qualities)
-            {
-                if (objQuality.Type == QualityType.Negative && objQuality.ContributeToLimit)
-                    intNegativeQualityBP += objQuality.BP;
-            }
-            // Include the amount of free Negative Qualities from Improvements.
-            intNegativeQualityBP -= ImprovementManager.ValueOf(CharacterObject, Improvement.ImprovementType.FreeNegativeQualities);
-
-            // Adjust for Karma cost multiplier.
-            intNegativeQualityBP *= CharacterObjectOptions.KarmaQuality;
-
-            // Find current enemy BP total
-            int intBPUsed = 0;
-            foreach (Contact objLoopEnemy in CharacterObject.Contacts)
-            {
-                if (objLoopEnemy.EntityType == ContactType.Enemy && !objLoopEnemy.Free)
-                {
-                    intBPUsed -= (objLoopEnemy.Connection + objLoopEnemy.Loyalty) * CharacterObjectOptions.KarmaEnemy;
-                }
-            }
-
-            int intEnemyMax = CharacterObject.GameplayOptionQualityLimit;
-            int intQualityMax = CharacterObject.GameplayOptionQualityLimit;
-            string strSpace = LanguageManager.GetString("String_Space");
-            string strEnemyPoints = intEnemyMax.ToString(GlobalOptions.CultureInfo) + strSpace + LanguageManager.GetString("String_Karma");
-            string strQualityPoints = intQualityMax.ToString(GlobalOptions.CultureInfo) + strSpace + LanguageManager.GetString("String_Karma");
-
-            if (intBPUsed < (intEnemyMax * -1) && !CharacterObject.IgnoreRules && CharacterObjectOptions.EnemyKarmaQualityLimit)
-            {
-                Program.MainForm.ShowMessageBox(this, string.Format(GlobalOptions.CultureInfo, LanguageManager.GetString("Message_EnemyLimit"), strEnemyPoints),
-                    LanguageManager.GetString("MessageTitle_EnemyLimit"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Contact objSenderContact = objSenderControl?.ContactObject;
-                if (objSenderContact != null)
-                {
-                    int intTotal = (intEnemyMax * -1) - intBPUsed;
-                    switch (e.Text)
-                    {
-                        case "Connection":
-                            objSenderContact.Connection -= intTotal;
-                            break;
-                        case "Loyalty":
-                            objSenderContact.Loyalty -= intTotal;
-                            break;
-                    }
-                }
-
-                return;
-            }
-
-            if (!CharacterObjectOptions.ExceedNegativeQualities && CharacterObjectOptions.EnemyKarmaQualityLimit)
-            {
-                if (intBPUsed + intNegativeQualityBP < (intQualityMax * -1) && !CharacterObject.IgnoreRules)
-                {
-                    Program.MainForm.ShowMessageBox(this, string.Format(GlobalOptions.CultureInfo, LanguageManager.GetString("Message_NegativeQualityLimit"), strQualityPoints),
-                        LanguageManager.GetString("MessageTitle_NegativeQualityLimit"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Contact objSenderContact = objSenderControl?.ContactObject;
-                    if (objSenderContact != null)
-                    {
-                        switch (e.Text)
-                        {
-                            case "Connection":
-                                objSenderContact.Connection -= (((intQualityMax * -1) - (intBPUsed + intNegativeQualityBP)) /
-                                                                CharacterObjectOptions.KarmaQuality);
-                                break;
-                            case "Loyalty":
-                                objSenderContact.Loyalty -= (((intQualityMax * -1) - (intBPUsed + intNegativeQualityBP)) /
-                                                             CharacterObjectOptions.KarmaQuality);
-                                break;
-                        }
-                    }
-                }
-            }
-
-            IsCharacterUpdateRequested = true;
-
-            IsDirty = true;
-        }
-
         protected void DeleteEnemy(object sender, EventArgs e)
         {
             if (sender is ContactControl objSender)
@@ -6236,10 +6122,16 @@ namespace Chummer
 
             Image imgMugshot = _objCharacter.Mugshots[intCurrentMugshotIndexInList];
 
-            if (imgMugshot != null && picMugshot.Height >= imgMugshot.Height && picMugshot.Width >= imgMugshot.Width)
-                picMugshot.SizeMode = PictureBoxSizeMode.CenterImage;
-            else
+            try
+            {
+                picMugshot.SizeMode = imgMugshot != null && picMugshot.Height >= imgMugshot.Height && picMugshot.Width >= imgMugshot.Width
+                    ? PictureBoxSizeMode.CenterImage
+                    : PictureBoxSizeMode.Zoom;
+            }
+            catch (ArgumentException) // No other way to catch when the Image is not null, but is disposed
+            {
                 picMugshot.SizeMode = PictureBoxSizeMode.Zoom;
+            }
             picMugshot.Image = imgMugshot;
         }
 
@@ -6586,23 +6478,19 @@ namespace Chummer
                         }
 
 
-                        bool blnMatchFound = false;
+                        Gear objExistingGear = null;
                         // If this is Ammunition, see if the character already has it on them.
                         if (objGear.Category == "Ammunition" && frmPickGear.Stack)
                         {
-                            foreach (Gear objVehicleGear in objSelectedVehicle.Gear.Where(objVehicleGear =>
-                                objVehicleGear.Name == objGear.Name && objVehicleGear.Category == objGear.Category &&
-                                objVehicleGear.Rating == objGear.Rating && objVehicleGear.Extra == objGear.Extra &&
-                                objVehicleGear.Children.SequenceEqual(objGear.Children)))
-                            {
-                                // A match was found, so increase the quantity instead.
-                                objVehicleGear.Quantity += objGear.Quantity;
-                                blnMatchFound = true;
-                                break;
-                            }
+                            objExistingGear = objSelectedVehicle.Gear.FirstOrDefault(x => objGear.IsIdenticalToOtherGear(x));
                         }
 
-                        if (!blnMatchFound)
+                        if (objExistingGear != null)
+                        {
+                            // A match was found, so increase the quantity instead.
+                            objExistingGear.Quantity += objGear.Quantity;
+                        }
+                        else
                         {
                             // Add the Gear to the Vehicle.
                             objLocation?.Children.Add(objGear);

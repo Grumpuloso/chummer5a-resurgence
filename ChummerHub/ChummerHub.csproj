@@ -25,6 +25,8 @@
     <Compile Remove="Migrations\20190314112930_2347823423.Designer.cs" />
     <Compile Remove="Migrations\20190314121202_cumulativeMigration.cs" />
     <Compile Remove="Migrations\20190314121202_cumulativeMigration.Designer.cs" />
+    <Compile Remove="Migrations\20201112231959_hashset-favorites.cs" />
+    <Compile Remove="Migrations\20201112231959_hashset-favorites.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -713,7 +713,13 @@ namespace Chummer
                             ? objXmlMetatype
                             : objXmlMetavariant ?? objXmlMetatype;
 
-                    bool boolHalveAttributePriorityPoints = charNode.NodeExists("halveattributepoints");
+                    //Multiply the starting attribute total by this factor later, if this node is present
+                    double dblAttributePriorityPointFactor = 0.0;
+                    charNode.TryGetDoubleFieldQuickly("attributeprioritypointfactor", ref dblAttributePriorityPointFactor);
+
+                    //Add this bonus value to the starting attribute point total, after multiplying by dblAttrbutePriorityPointFactor, if this node is present
+                    int intAttributePriorityBonus = 0;
+                    charNode.TryGetInt32FieldQuickly("attributeprioritypointbonus", ref intAttributePriorityBonus);
 
                     if (strOldSpecialPriority != _objCharacter.SpecialPriority || strOldTalentPriority != _objCharacter.SpecialPriority)
                     {
@@ -816,8 +822,12 @@ namespace Chummer
                         {
                             int intAttributes = 0;
                             objXmlAttributesPriority.TryGetInt32FieldQuickly("attributes", ref intAttributes);
-                            if (boolHalveAttributePriorityPoints)
-                                intAttributes /= 2;
+                            if (dblAttributePriorityPointFactor > 0.0)
+                                intAttributes = (int)(intAttributes * dblAttributePriorityPointFactor);
+
+                            if (intAttributePriorityBonus > 0)
+                                intAttributePriorityBonus += intAttributePriorityBonus;
+
                             _objCharacter.TotalAttributes = _objCharacter.Attributes = intAttributes;
                             break;
                         }

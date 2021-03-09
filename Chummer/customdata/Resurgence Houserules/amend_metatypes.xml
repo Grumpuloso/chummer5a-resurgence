@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This file is part a series of data files created for r/NeonAnarchy.
+
+	You can learn more at
+	https://www.reddit.com/r/NeonAnarchy
+-->
+<chummer>
+	<metatypes>
+		<metatype>
+			<name>Troll</name>
+			<bonus>
+				<armor group="0">1</armor>
+				<reach>1</reach>
+				<lifestylecost />
+			</bonus>
+			<metavariants>
+				<metavariant>
+					<name>Cyclops</name>
+					<bonus>
+						<reach>1</reach>
+						<lifestylecost />
+					</bonus>
+				</metavariant>
+				<metavariant>
+					<name>Fomorian</name>
+					<bonus>
+						<reach>1</reach>
+						<lifestylecost />
+					</bonus>
+				</metavariant>
+				<metavariant>
+					<name>Giant</name>
+					<bonus>
+						<reach>1</reach>
+						<lifestylecost />
+					</bonus>
+					<source>RF</source>
+					<page>104</page>
+				</metavariant>
+				<metavariant>
+					<name>Minotaur</name>
+					<bonus>
+						<reach>1</reach>
+						<lifestylecost />
+					</bonus>
+				</metavariant>
+			</metavariants>
+		</metatype>
+		<metatype>
+			<name>A.I.</name>
+			<qualities>
+				<negative amendoperation="remove" />
+			</qualities>
+			<qualityrestriction amendoperation="replace">
+				<positive>
+					<quality>Animal Empathy</quality>
+					<quality>Aptitude</quality>
+					<quality>Brand Loyalty (Manufacturer)</quality>
+					<quality>Brand Loyalty (Product)</quality>
+					<quality>Bilingual</quality>
+					<quality>Chatty</quality>
+					<quality>Codeslinger</quality>
+					<quality>College Education</quality>
+					<quality>Data Anomaly</quality>
+					<quality>Designer</quality>
+					<quality>Exceptional Entity</quality>
+					<quality>Fade to Black</quality>
+					<quality>Fame: Local</quality>
+					<quality>Fame: National</quality>
+					<quality>Fame: Megacorporate</quality>
+					<quality>Fame: Global</quality>
+					<quality>First Impression</quality>
+					<quality>Friends in High Places</quality>
+					<quality>Gearhead</quality>
+					<quality>Gifted Healer</quality>
+					<quality>Go Big or Go Home</quality>
+					<quality>Golden Screwdriver</quality>
+					<quality>Guts</quality>
+					<quality>Hello World!</quality>
+					<quality>High Pain Tolerance</quality>
+					<quality>Home Ground</quality>
+					<quality>I C U</quality>
+					<quality>Indomitable (Mental)</quality>
+					<quality>Indomitable (Physical)</quality>
+					<quality>Indomitable (Social)</quality>
+					<quality>Inherent Program</quality>
+					<quality>Improved Restoration</quality>
+					<quality>Inspired</quality>
+					<quality>Juryrigger</quality>
+					<quality>Legendary Rep</quality>
+					<quality>Linguist</quality>
+					<quality>Low Profile</quality>
+					<quality>Lucky</quality>
+					<quality>Multiprocessing</quality>
+					<quality>Munge</quality>
+					<quality>Ninja Vanish</quality>
+					<quality>Overclocker</quality>
+					<quality>Perceptive</quality>
+					<quality>Photographic Memory</quality>
+					<quality>Pilot Origins</quality>
+					<quality>Prime Datahaven Membership</quality>
+					<quality>Quick Healer</quality>
+					<quality>Redundancy</quality>
+					<quality>Restricted Gear</quality>
+					<quality>Sapper</quality>
+					<quality>Sensor Upgrade</quality>
+					<quality>Sense of Direction</quality>
+					<quality>Sensei</quality>
+					<quality>Sharpshooter</quality>
+					<quality>Snooper</quality>
+					<quality>Solid Rep</quality>
+					<quality>Speed Reading</quality>
+					<quality>Strive For Perfection</quality>
+					<quality>Steely Eyed Wheelman</quality>
+					<quality>Virtual Stability</quality>
+					<quality>Trustworthy</quality>
+					<quality>Vehicle Empathy</quality>
+					<quality>Technical School Education</quality>
+					<quality>Alibi</quality>
+					<quality>Battle Hardened</quality>
+					<quality>Barrens Rat </quality>
+					<quality>Brilliant Heuristics</quality>
+					<quality>Candle in the Darkness</quality>
+					<quality>Chaser</quality>
+					<quality>Closer</quality>
+					<quality>Corporate Loyalist</quality>
+					<quality>Cynic</quality>
+					<quality>Dealer Connection</quality>
+					<quality>Deck Builder</quality>
+					<quality>Empathic Listener</quality>
+					<quality>Fractal Punch</quality>
+					<quality>Grease Monkey</quality>
+					<quality>Groupthink</quality>
+					<quality>Hold the Door</quality>
+					<quality>Honest Face</quality>
+					<quality>Impenetrable Logic</quality>
+					<quality>Innocuous</quality>
+					<quality>Instinctive Hack</quality>
+					<quality>Lone Wolf</quality>
+					<quality>Master Debater</quality>
+					<quality>Method Actor</quality>
+					<quality>Natural Leader</quality>
+					<quality>Poisoner</quality>
+					<quality>Practice Practice Practice</quality>
+					<quality>Rabble Rouser</quality>
+					<quality>Reverberant</quality>
+					<quality>Rootkit</quality>
+					<quality>Shoot first, don’t ask</quality>
+					<quality>Silence is Golden</quality>
+					<quality>Social Chameleon</quality>
+					<quality>Speed Demon</quality>
+					<quality>Subtle Pilot</quality>
+					<quality>Team Player</quality>
+					<quality>Trust Data, Not Lore</quality>
+					<quality>Trust Lore, Not Data</quality>
+					<quality>Uncanny Healer</quality>
+					<quality> Unique Avatar</quality>
+				</positive>
+				<negative>
+					<quality>Bad Luck</quality>
+					<quality>Bad Rep</quality>
+					<quality>Code of Honor</quality>
+					<quality>Code of Honor: Like a Boss</quality>
+					<quality>Code of Honor: Avenging Angel</quality>
+					<quality>Codeblock</quality>
+					<quality>Combat Paralysis</quality>
+					<quality>Corrupter</quality>
+					<quality>Curiosity Killed the Cat</quality>
+					<quality>Data Liberator</quality>
+					<quality>Day Job (10 hrs)</quality>
+					<quality>Day Job (20 hrs)</quality>
+					<quality>Day Job (40 hrs)</quality>
+					<quality>Did You Just Call Me Dumb?</quality>
+					<quality>Distinctive Style</quality>
+					<quality>Driven</quality>
+					<quality>Easily Exploitable</quality>
+					<quality>Fragmentation</quality>
+					<quality>Incompetent</quality>
+					<quality>Loss of Confidence</quality>
+					<quality>Low Pain Tolerance</quality>
+					<quality>Pacifist I</quality>
+					<quality>Pacifist II</quality>
+					<quality>Persnickety Renter</quality>
+					<quality>Prank Warrior</quality>
+					<quality>Prejudiced (Common, Biased)</quality>
+					<quality>Prejudiced (Common, Outspoken)</quality>
+					<quality>Prejudiced (Common, Radical)</quality>
+					<quality>Prejudiced (Specific, Biased)</quality>
+					<quality>Prejudiced (Specific, Outspoken)</quality>
+					<quality>Prejudiced (Specific, Radical)</quality>
+					<quality>Real World Naiveté</quality>
+					<quality>Records on File</quality>
+					<quality>Signature</quality>
+					<quality>SINner (Corporate Limited)</quality>
+					<quality>SINner (Corporate)</quality>
+					<quality>SINner (Criminal)</quality>
+					<quality>SINner (National)</quality>
+					<quality>Uncouth</quality>
+					<quality>Uneducated</quality>
+					<quality>Vendetta</quality>
+					<quality>Wanted</quality>
+					<quality>Wanted by GOD</quality>
+					<quality>Accident prone</quality>
+					<quality>Alpha Junkie</quality>
+					<quality>Antipathy</quality>
+					<quality>Buddy System</quality>
+					<quality>Data Hog</quality>
+					<quality>Data Liberator</quality>
+					<quality>Designated Omega</quality>
+					<quality>Down the rabbit hole</quality>
+					<quality>Escaped Custody</quality>
+					<quality>Every Man for Himself</quality>
+					<quality>Favored</quality>
+					<quality>Force of Chaos</quality>
+					<quality>Impassive</quality>
+					<quality>Lack of Focus</quality>
+					<quality>Lazy Fingers</quality>
+					<quality>Malware Infection</quality>
+					<quality>Matrix Troll</quality>
+					<quality>No Man Left Behind</quality>
+					<quality>One Born Every Minute</quality>
+					<quality>Sloppy Code </quality>
+					<quality>Superhuman Psychosis</quality>
+					<quality>The Goat</quality>
+					<quality>Thousand Yard Stare</quality>
+					<quality>Too much data</quality>
+					<quality>Uncouth</quality>
+					<quality>Well, Actually</quality>
+				</negative>
+			</qualityrestriction>
+			<metavariants>
+				<metavariant>
+					<name>E-Ghost</name>
+					<qualityrestriction amendoperation="replace">
+						<positive>
+							<quality>Animal Empathy</quality>
+							<quality>Aptitude</quality>
+							<quality>Brand Loyalty (Manufacturer)</quality>
+							<quality>Brand Loyalty (Product)</quality>
+							<quality>Bilingual</quality>
+							<quality>Chatty</quality>
+							<quality>Codeslinger</quality>
+							<quality>College Education</quality>
+							<quality>Data Anomaly</quality>
+							<quality>Designer</quality>
+							<quality>Exceptional Entity</quality>
+							<quality>Fade to Black</quality>
+							<quality>Fame: Local</quality>
+							<quality>Fame: National</quality>
+							<quality>Fame: Megacorporate</quality>
+							<quality>Fame: Global</quality>
+							<quality>First Impression</quality>
+							<quality>Friends in High Places</quality>
+							<quality>Gearhead</quality>
+							<quality>Gifted Healer</quality>
+							<quality>Go Big or Go Home</quality>
+							<quality>Golden Screwdriver</quality>
+							<quality>Guts</quality>
+							<quality>Hello World!</quality>
+							<quality>High Pain Tolerance</quality>
+							<quality>Home Ground</quality>
+							<quality>I C U</quality>
+							<quality>Indomitable (Mental)</quality>
+							<quality>Indomitable (Physical)</quality>
+							<quality>Indomitable (Social)</quality>
+							<quality>Inherent Program</quality>
+							<quality>Improved Restoration</quality>
+							<quality>Inspired</quality>
+							<quality>Juryrigger</quality>
+							<quality>Legendary Rep</quality>
+							<quality>Linguist</quality>
+							<quality>Low Profile</quality>
+							<quality>Lucky</quality>
+							<quality>Multiprocessing</quality>
+							<quality>Munge</quality>
+							<quality>Ninja Vanish</quality>
+							<quality>Overclocker</quality>
+							<quality>Perceptive</quality>
+							<quality>Photographic Memory</quality>
+							<quality>Pilot Origins</quality>
+							<quality>Prime Datahaven Membership</quality>
+							<quality>Quick Healer</quality>
+							<quality>Redundancy</quality>
+							<quality>Restricted Gear</quality>
+							<quality>Sapper</quality>
+							<quality>Sensor Upgrade</quality>
+							<quality>Sense of Direction</quality>
+							<quality>Sensei</quality>
+							<quality>Sharpshooter</quality>
+							<quality>Snooper</quality>
+							<quality>Solid Rep</quality>
+							<quality>Speed Reading</quality>
+							<quality>Strive For Perfection</quality>
+							<quality>Steely Eyed Wheelman</quality>
+							<quality>Virtual Stability</quality>
+							<quality>Trustworthy</quality>
+							<quality>Vehicle Empathy</quality>
+							<quality>Technical School Education</quality>
+							<quality>Alibi</quality>
+							<quality>Battle Hardened</quality>
+							<quality>Barrens Rat </quality>
+							<quality>Brilliant Heuristics</quality>
+							<quality>Candle in the Darkness</quality>
+							<quality>Chaser</quality>
+							<quality>Closer</quality>
+							<quality>Corporate Loyalist</quality>
+							<quality>Cynic</quality>
+							<quality>Dealer Connection</quality>
+							<quality>Deck Builder</quality>
+							<quality>Empathic Listener</quality>
+							<quality>Fractal Punch</quality>
+							<quality>Grease Monkey</quality>
+							<quality>Groupthink</quality>
+							<quality>Hold the Door</quality>
+							<quality>Honest Face</quality>
+							<quality>Impenetrable Logic</quality>
+							<quality>Innocuous</quality>
+							<quality>Instinctive Hack</quality>
+							<quality>Lone Wolf</quality>
+							<quality>Master Debater</quality>
+							<quality>Method Actor</quality>
+							<quality>Natural Leader</quality>
+							<quality>Poisoner</quality>
+							<quality>Practice Practice Practice</quality>
+							<quality>Rabble Rouser</quality>
+							<quality>Reverberant</quality>
+							<quality>Rootkit</quality>
+							<quality>Shoot first, don’t ask</quality>
+							<quality>Silence is Golden</quality>
+							<quality>Social Chameleon</quality>
+							<quality>Speed Demon</quality>
+							<quality>Subtle Pilot</quality>
+							<quality>Team Player</quality>
+							<quality>Trust Data, Not Lore</quality>
+							<quality>Trust Lore, Not Data</quality>
+							<quality>Uncanny Healer</quality>
+							<quality> Unique Avatar</quality>
+						</positive>
+						<negative>
+							<quality>Bad Luck</quality>
+							<quality>Bad Rep</quality>
+							<quality>Code of Honor</quality>
+							<quality>Code of Honor: Like a Boss</quality>
+							<quality>Code of Honor: Avenging Angel</quality>
+							<quality>Codeblock</quality>
+							<quality>Combat Paralysis</quality>
+							<quality>Corrupter</quality>
+							<quality>Curiosity Killed the Cat</quality>
+							<quality>Data Liberator</quality>
+							<quality>Day Job (10 hrs)</quality>
+							<quality>Day Job (20 hrs)</quality>
+							<quality>Day Job (40 hrs)</quality>
+							<quality>Did You Just Call Me Dumb?</quality>
+							<quality>Distinctive Style</quality>
+							<quality>Driven</quality>
+							<quality>Easily Exploitable</quality>
+							<quality>Fragmentation</quality>
+							<quality>Incompetent</quality>
+							<quality>Loss of Confidence</quality>
+							<quality>Low Pain Tolerance</quality>
+							<quality>Pacifist I</quality>
+							<quality>Pacifist II</quality>
+							<quality>Persnickety Renter</quality>
+							<quality>Prank Warrior</quality>
+							<quality>Prejudiced (Common, Biased)</quality>
+							<quality>Prejudiced (Common, Outspoken)</quality>
+							<quality>Prejudiced (Common, Radical)</quality>
+							<quality>Prejudiced (Specific, Biased)</quality>
+							<quality>Prejudiced (Specific, Outspoken)</quality>
+							<quality>Prejudiced (Specific, Radical)</quality>
+							<quality>Real World Naiveté</quality>
+							<quality>Records on File</quality>
+							<quality>Signature</quality>
+							<quality>SINner (Corporate Limited)</quality>
+							<quality>SINner (Corporate)</quality>
+							<quality>SINner (Criminal)</quality>
+							<quality>SINner (National)</quality>
+							<quality>Uncouth</quality>
+							<quality>Uneducated</quality>
+							<quality>Vendetta</quality>
+							<quality>Wanted</quality>
+							<quality>Wanted by GOD</quality>
+							<quality>Accident prone</quality>
+							<quality>Alpha Junkie</quality>
+							<quality>Antipathy</quality>
+							<quality>Buddy System</quality>
+							<quality>Data Hog</quality>
+							<quality>Data Liberator</quality>
+							<quality>Designated Omega</quality>
+							<quality>Down the rabbit hole</quality>
+							<quality>Escaped Custody</quality>
+							<quality>Every Man for Himself</quality>
+							<quality>Favored</quality>
+							<quality>Force of Chaos</quality>
+							<quality>Impassive</quality>
+							<quality>Lack of Focus</quality>
+							<quality>Lazy Fingers</quality>
+							<quality>Malware Infection</quality>
+							<quality>Matrix Troll</quality>
+							<quality>No Man Left Behind</quality>
+							<quality>One Born Every Minute</quality>
+							<quality>Sloppy Code </quality>
+							<quality>Superhuman Psychosis</quality>
+							<quality>The Goat</quality>
+							<quality>Thousand Yard Stare</quality>
+							<quality>Too much data</quality>
+							<quality>Uncouth</quality>
+							<quality>Well, Actually</quality>
+						</negative>
+					</qualityrestriction>
+				</metavariant>
+			</metavariants>
+		</metatype>
+	</metatypes>
+</chummer>

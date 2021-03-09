@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--This file is part a series of data files created for r/NeonAnarchy.
+
+	You can learn more at
+	https://www.reddit.com/r/NeonAnarchy
+-->
+<chummer amendoperation="recurse">
+	<grades amendoperation="recurse">
+		<grade xpathfilter="name='Gammaware' or name='Omegaware'" amendoperation="recurse">
+			<hide amendoperation="addnode" />
+		</grade>
+	</grades>
+	<biowares>
+		<bioware>
+			<name>Immunization</name>
+			<hide />
+		</bioware>
+	</biowares>
+</chummer>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This file is part a series of data files created for r/NeonAnarchy.
+
+	You can learn more at
+	https://www.reddit.com/r/NeonAnarchy
+-->
+<chummer>
+	<weapons>
+		<weapon>
+			<id>6aa0fdb2-c6dc-11ea-87d0-0242ac130003</id>
+			<name>Grenade: Painade</name>
+			<category>Gear</category>
+			<type>Ranged</type>
+			<conceal>0</conceal>
+			<accuracy>Physical</accuracy>
+			<reach>0</reach>
+			<damage>8S</damage>
+			<ap>-</ap>
+			<mode>0</mode>
+			<rc>0</rc>
+			<ammo>0</ammo>
+			<avail>10R</avail>
+			<cost>100</cost>
+			<source>CA</source>
+			<page>135</page>
+			<range>Standard Grenade</range>
+			<spec>Non-Aerodynamic</spec>
+			<useskill>Throwing Weapons</useskill>
+		</weapon>
+		<weapon>
+			<id>6414c5fa-c6dc-11ea-87d0-0242ac130003</id>
+			<name>Grenade: Painade, Aerodynamic</name>
+			<category>Gear</category>
+			<type>Ranged</type>
+			<conceal>0</conceal>
+			<accuracy>Physical</accuracy>
+			<reach>0</reach>
+			<damage>8S</damage>
+			<ap>-</ap>
+			<mode>0</mode>
+			<rc>0</rc>
+			<ammo>0</ammo>
+			<avail>10R</avail>
+			<cost>100</cost>
+			<source>CA</source>
+			<page>135</page>
+			<range>Aerodynamic Grenade</range>
+			<spec>Aerodynamic</spec>
+			<useskill>Throwing Weapons</useskill>
+		</weapon>
+	</weapons>
+</chummer>

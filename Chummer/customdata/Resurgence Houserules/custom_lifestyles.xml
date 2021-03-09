@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This file is part a series of data files created for r/NeonAnarchy.
+
+	You can learn more at
+	https://www.reddit.com/r/NeonAnarchy
+-->
+<chummer>
+	<qualities>
+		<quality>
+			<id>b7dc10c6-88b4-4236-a5e8-2f13a472e443</id>
+			<name>Fab Sensor Feedstock</name>
+			<category>Contracts</category>
+			<lp>0</lp>
+			<allowed />
+			<allowmultiple />
+			<cost>50</cost>
+			<source>HT</source>
+			<page>195</page>
+		</quality>
+	</qualities>
+</chummer>

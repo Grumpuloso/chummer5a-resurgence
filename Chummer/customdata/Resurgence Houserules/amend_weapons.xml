@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This file is part a series of data files created for r/NeonAnarchy.
+
+	You can learn more at
+	https://www.reddit.com/r/NeonAnarchy
+-->
+<chummer>
+	<weapons>
+		<weapon>
+			<name>Morrissey Alta</name>
+			<avail>7R</avail>
+		</weapon>
+		<weapon>
+			<name>Renraku Red Samurai Katana</name>
+			<avail>24F</avail>
+			<cost>30000</cost>
+		</weapon>
+		<weapon>
+			<name>Repeating Laser</name>
+			<cost>30000</cost>
+		</weapon>
+		<weapon>
+			<name>Krime Escalation</name>
+			<damage>Missile</damage>
+		</weapon>
+		<weapon>
+			<name>Krime Calliope</name>
+			<damage>Missile</damage>
+		</weapon>
+		<!--
+			<weapon>
+				<name>Underbarrel Bola Launcher</name>
+				<category>Underbarrel Weapons</category>
+				<useskill>Exotic Ballistic</useskill>
+				<useskillspec amendoperation="remove">Bola</useskillspec>
+			</weapon>
+		-->
+	</weapons>
+</chummer>

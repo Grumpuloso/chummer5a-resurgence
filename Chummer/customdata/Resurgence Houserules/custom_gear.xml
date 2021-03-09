@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This file is part a series of data files created for r/NeonAnarchy.
+
+	You can learn more at
+	https://www.reddit.com/r/NeonAnarchy
+-->
+<chummer>
+	<categories>
+		<category>Jetpacks</category>
+	</categories>
+	<gears>
+		<gear>
+			<id>4e010d54-c232-11ea-b3de-0242ac130004</id>
+			<name>Vulcan Systems "Hot-Drop" Jetpack Fuel</name>
+			<category>Jetpacks</category>
+			<rating>0</rating>
+			<source>NA</source>
+			<page>33</page>
+			<avail>10F</avail>
+			<cost>500</cost>
+			<costfor>20</costfor>
+		</gear>
+		<gear>
+			<id>a91d8b6c-c22e-11ea-b3de-0242ac130004</id>
+			<name>Vulcan Systems "Hot-Drop" Rapid-Egress Jetpack System</name>
+			<category>Jetpacks</category>
+			<rating>0</rating>
+			<source>NA</source>
+			<page>33</page>
+			<avail>16F</avail>
+			<cost>40000</cost>
+		</gear>
+		<gear>
+			<id>a91d8b6c-c22e-11ea-b3de-0242ac130005</id>
+			<name>Grenade: Painade</name>
+			<category>Ammunition</category>
+			<rating>0</rating>
+			<source>CA</source>
+			<page>135</page>
+			<avail>10R</avail>
+			<addweapon>Grenade: Painade</addweapon>
+			<cost>100</cost>
+		</gear>
+		<gear>
+			<id>49870734-c6dc-11ea-87d0-0242ac130003</id>
+			<name>Grenade: Painade, Aerodynamic</name>
+			<category>Ammunition</category>
+			<rating>0</rating>
+			<source>CA</source>
+			<page>135</page>
+			<avail>10R</avail>
+			<addweapon>Grenade: Painade, Aerodynamic</addweapon>
+			<cost>100</cost>
+		</gear>
+		<gear>
+			<id>a91d8b6c-c22e-11ea-b3de-0242ac130007</id>
+			<name>Cry Wolf</name>
+			<category>Hacking Programs</category>
+			<rating>0</rating>
+			<source>KC</source>
+			<page>63</page>
+			<avail>4F</avail>
+			<cost>250</cost>
+		</gear>
+		<gear>
+			<id>8e165c31-5da9-42ba-9913-3a7465a942c7</id>
+			<name>Zone</name>
+			<category>Drugs</category>
+			<rating>0</rating>
+			<source>CF</source>
+			<page>184</page>
+			<avail>6R</avail>
+			<cost>100</cost>
+		</gear>
+	</gears>
+</chummer>

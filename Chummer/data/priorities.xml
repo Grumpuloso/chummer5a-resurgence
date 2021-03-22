@@ -38,22 +38,22 @@
       <metatypes>
         <metatype>
           <name>A.I.</name>
-          <value>4</value>
+          <value>6</value>
           <karma>0</karma>
           <metavariants>
             <metavariant>
               <name>E-Ghost</name>
-              <value>4</value>
+              <value>6</value>
               <karma>0</karma>
             </metavariant>
             <metavariant>
               <name>Xenosapient</name>
-              <value>4</value>
+              <value>6</value>
               <karma>0</karma>
             </metavariant>
             <metavariant>
               <name>Protosapient</name>
-              <value>4</value>
+              <value>6</value>
               <karma>0</karma>
             </metavariant>
           </metavariants>
@@ -1496,22 +1496,22 @@
       <metatypes>
         <metatype>
           <name>A.I.</name>
-          <value>2</value>
+          <value>4</value>
           <karma>0</karma>
           <metavariants>
             <metavariant>
               <name>E-Ghost</name>
-              <value>2</value>
+              <value>4</value>
               <karma>0</karma>
             </metavariant>
             <metavariant>
               <name>Xenosapient</name>
-              <value>2</value>
+              <value>4</value>
               <karma>0</karma>
             </metavariant>
             <metavariant>
               <name>Protosapient</name>
-              <value>2</value>
+              <value>4</value>
               <karma>0</karma>
             </metavariant>
           </metavariants>
@@ -2954,22 +2954,22 @@
       <metatypes>
         <metatype>
           <name>A.I.</name>
-          <value>0</value>
+          <value>2</value>
           <karma>0</karma>
           <metavariants>
             <metavariant>
               <name>E-Ghost</name>
-              <value>0</value>
+              <value>2</value>
               <karma>0</karma>
             </metavariant>
             <metavariant>
               <name>Xenosapient</name>
-              <value>0</value>
+              <value>2</value>
               <karma>0</karma>
             </metavariant>
             <metavariant>
               <name>Protosapient</name>
-              <value>0</value>
+              <value>2</value>
               <karma>0</karma>
             </metavariant>
           </metavariants>
@@ -4384,10 +4384,32 @@
     </priority>
     <priority>
       <id>255da2ba-8d21-4a73-9f81-37156901db72</id>
-      <name>D - Human or Elf</name>
+      <name>D - Human, Elf or A.I.</name>
       <value>D,1</value>
       <category>Heritage</category>
       <metatypes>
+        <metatype>
+          <name>A.I.</name>
+          <value>0</value>
+          <karma>0</karma>
+          <metavariants>
+            <metavariant>
+              <name>E-Ghost</name>
+              <value>0</value>
+              <karma>0</karma>
+            </metavariant>
+            <metavariant>
+              <name>Xenosapient</name>
+              <value>0</value>
+              <karma>0</karma>
+            </metavariant>
+            <metavariant>
+              <name>Protosapient</name>
+              <value>0</value>
+              <karma>0</karma>
+            </metavariant>
+          </metavariants>
+        </metatype>
         <metatype>
           <name>Human</name>
           <value>3</value>

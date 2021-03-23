@@ -816,6 +816,7 @@ namespace Chummer
                     // Set Attributes
                     XPathNodeIterator objXmlAttributesPriorityList = _xmlBasePriorityDataNode.Select("priorities/priority[category = \"Attributes\" and value = \"" + _objCharacter.AttributesPriority +
                                                                                                      "\" and (not(gameplayoption) or gameplayoption = \"" + _objCharacter.GameplayOption + "\")]");
+
                     foreach (XPathNavigator objXmlAttributesPriority in objXmlAttributesPriorityList)
                     {
                         if (objXmlAttributesPriorityList.Count == 1 || objXmlAttributesPriority.SelectSingleNode("gameplayoption") != null)
@@ -827,6 +828,32 @@ namespace Chummer
 
                             if (intAttributePriorityBonus > 0)
                                 intAttributePriorityBonus += intAttributePriorityBonus;
+
+                            //This is an extremely dirty way to handle this, but there's no immediately obvious function for converting the existing array to this scheme at the moment
+                            if(_objCharacter.DEPEnabled)
+                            {
+                                switch(intAttributes)
+                                {
+                                    case 24:
+                                        intAttributes = 16;
+                                        break;
+                                    case 20:
+                                        intAttributes = 14;
+                                        break;
+                                    case 16:
+                                        intAttributes = 12;
+                                        break;
+                                    case 14:
+                                        intAttributes = 10;
+                                        break;
+                                    case 12:
+                                        intAttributes = 8;
+                                        break;
+                                    default:
+                                        intAttributes = 8;
+                                        break;
+                                }
+                            }
 
                             _objCharacter.TotalAttributes = _objCharacter.Attributes = intAttributes;
                             break;

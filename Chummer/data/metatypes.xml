@@ -1677,7 +1677,7 @@
       <name>A.I.</name>
       <category>Metasapient</category>
       <karma>180</karma>
-      <attributeprioritypointfactor>0.75</attributeprioritypointfactor>
+      <attributeprioritypointfactor>1.0</attributeprioritypointfactor>
       <attributeprioritypointbonus>0</attributeprioritypointbonus>
       <bodmin>0</bodmin>
       <bodmax>0</bodmax>
@@ -1860,7 +1860,7 @@
           <name>E-Ghost</name>
           <category>Metavariant</category>
           <karma>180</karma>
-          <attributeprioritypointfactor>0.75</attributeprioritypointfactor>
+          <attributeprioritypointfactor>1.0</attributeprioritypointfactor>
           <attributeprioritypointbonus>0</attributeprioritypointbonus>
           <bodmin>0</bodmin>
           <bodmax>0</bodmax>
@@ -2046,7 +2046,7 @@
           <name>Xenosapient</name>
           <category>Metavariant</category>
           <karma>180</karma>
-          <attributeprioritypointfactor>0.75</attributeprioritypointfactor>
+          <attributeprioritypointfactor>1.0</attributeprioritypointfactor>
           <attributeprioritypointbonus>0</attributeprioritypointbonus>
           <bodmin>0</bodmin>
           <bodmax>0</bodmax>
@@ -2232,7 +2232,7 @@
           <name>Protosapient</name>
           <category>Metavariant</category>
           <karma>180</karma>
-          <attributeprioritypointfactor>0.75</attributeprioritypointfactor>
+          <attributeprioritypointfactor>1.0</attributeprioritypointfactor>
           <attributeprioritypointbonus>0</attributeprioritypointbonus>
           <bodmin>0</bodmin>
           <bodmax>0</bodmax>

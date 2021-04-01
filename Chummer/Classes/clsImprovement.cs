@@ -3099,6 +3099,15 @@ namespace Chummer
                 //Log.Exit("ValueToInt");
                 return decValue;
             }
+            if(strValue.Contains("adeptpowerpoints"))
+            {
+                string strReturn = strValue.CheapReplace("adeptpowerpoints", () => objCharacter.PowerPointsTotal.ToString(GlobalOptions.InvariantCultureInfo));
+
+                object objProcess = CommonFunctions.EvaluateInvariantXPath(strReturn, out bool blnIsSuccess);
+                decimal decValue = blnIsSuccess ? Convert.ToDecimal((double)objProcess) : 0;
+
+                return objCharacter.PowerPointsTotal / 2;
+            }
             //Log.Exit("ValueToInt");
             decimal.TryParse(strValue, NumberStyles.Any, GlobalOptions.InvariantCultureInfo, out decimal decReturn);
             return decReturn;
